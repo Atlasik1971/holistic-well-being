@@ -1,95 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* ============================================
+   Дизайн-система: нутрициолог
+   Светлый фон, графитовый текст, шалфейный акцент
+   Все цвета — HSL
+   ============================================ */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Поверхности */
+    --background: 40 30% 97%;          /* warm off-white */
+    --foreground: 210 12% 18%;         /* graphite */
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 210 12% 18%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 210 12% 18%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Бренд: приглушённый шалфейный */
+    --primary: 95 14% 38%;             /* sage */
+    --primary-foreground: 40 30% 97%;
+    --primary-soft: 95 18% 88%;        /* очень мягкий шалфей для фоновых блоков */
+    --primary-deep: 95 18% 28%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Вторичные поверхности — серо-бежевые */
+    --secondary: 40 18% 93%;
+    --secondary-foreground: 210 12% 18%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 40 14% 94%;
+    --muted-foreground: 210 8% 42%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 95 18% 88%;
+    --accent-foreground: 95 18% 22%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 60% 45%;
+    --destructive-foreground: 40 30% 97%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 40 12% 88%;
+    --input: 40 12% 88%;
+    --ring: 95 14% 38%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
+    /* Типографика */
+    --font-serif: 'Cormorant Garamond', 'Georgia', serif;
+    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+
+    /* Тени — очень мягкие */
+    --shadow-soft: 0 1px 2px hsl(210 12% 18% / 0.04), 0 4px 16px hsl(210 12% 18% / 0.04);
+    --shadow-card: 0 1px 3px hsl(210 12% 18% / 0.04), 0 8px 32px hsl(210 12% 18% / 0.06);
+
+    /* Анимации */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Sidebar — оставляем shadcn-дефолт */
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
@@ -99,7 +75,58 @@ All colors MUST be HSL.
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: hsl(var(--foreground));
+  }
+
+  h1 { @apply text-4xl md:text-6xl leading-[1.05]; }
+  h2 { @apply text-3xl md:text-4xl leading-[1.1]; }
+  h3 { @apply text-xl md:text-2xl leading-tight; }
+
+  p { @apply leading-relaxed; }
+
+  ::selection {
+    background: hsl(var(--primary) / 0.18);
+    color: hsl(var(--primary-deep));
+  }
+}
+
+@layer components {
+  .container-narrow {
+    @apply mx-auto w-full max-w-3xl px-5 md:px-8;
+  }
+  .container-wide {
+    @apply mx-auto w-full max-w-6xl px-5 md:px-8;
+  }
+  .eyebrow {
+    @apply inline-block text-xs uppercase tracking-[0.2em] text-muted-foreground;
+  }
+  .prose-soft p {
+    @apply text-base md:text-lg text-muted-foreground leading-[1.75];
+  }
+  .card-soft {
+    @apply rounded-2xl border border-border bg-card p-6 md:p-8 transition-[transform,box-shadow] duration-300;
+    box-shadow: var(--shadow-soft);
+  }
+  .card-soft:hover {
+    box-shadow: var(--shadow-card);
+  }
+  .divider-dot {
+    @apply mx-auto my-12 md:my-20 h-1 w-1 rounded-full bg-primary/40;
   }
 }

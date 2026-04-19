@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
+import { useAuth } from "@/components/auth/AuthProvider";
 
 const Footer = () => {
   const year = new Date().getFullYear();
+  const { isAdmin } = useAuth();
+  const adminHref = isAdmin ? "/admin" : "/auth";
   return (
     <footer className="mt-24 md:mt-32 border-t border-border bg-secondary/40">
       <div className="container-wide py-14 md:py-20">
@@ -36,10 +39,16 @@ const Footer = () => {
 
         <div className="mt-12 pt-8 border-t border-border/70 flex flex-col md:flex-row gap-3 md:items-center md:justify-between text-xs text-muted-foreground">
           <div>© {year} Нутрициолог. Все права защищены.</div>
-          <div className="max-w-2xl md:text-right">
+          <div className="max-w-2xl md:flex-1 md:text-right">
             Информация на сайте носит ознакомительный характер и не является медицинской рекомендацией.
             Работа с заболеваниями — компетенция врача.
           </div>
+          <Link
+            to={adminHref}
+            className="text-muted-foreground/40 hover:text-muted-foreground/70 transition-colors md:ml-6 self-start md:self-auto"
+          >
+            Админка
+          </Link>
         </div>
       </div>
     </footer>

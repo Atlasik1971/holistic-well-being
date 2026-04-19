@@ -70,14 +70,14 @@ const Header = () => {
 
         <div className="flex items-center gap-2 lg:hidden">
           <ThemeToggle />
-
-        <button
-          aria-label={open ? "Закрыть меню" : "Открыть меню"}
-          className="lg:hidden inline-flex h-10 w-10 items-center justify-center rounded-full text-foreground hover:bg-secondary"
-          onClick={() => setOpen((v) => !v)}
-        >
-          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+          <button
+            aria-label={open ? "Закрыть меню" : "Открыть меню"}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full text-foreground hover:bg-secondary"
+            onClick={() => setOpen((v) => !v)}
+          >
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
       </div>
 
       {open && (

@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import ThemeToggle from "@/components/theme/ThemeToggle";
 
 const navItems = [
   { to: "/", label: "Главная" },
@@ -60,19 +61,23 @@ const Header = () => {
           ))}
         </nav>
 
-        <div className="hidden lg:block">
+        <div className="hidden lg:flex items-center gap-3">
+          <ThemeToggle />
           <Button asChild variant="hero" size="default" className="rounded-full">
             <Link to="/booking">Записаться</Link>
           </Button>
         </div>
 
-        <button
-          aria-label={open ? "Закрыть меню" : "Открыть меню"}
-          className="lg:hidden inline-flex h-10 w-10 items-center justify-center rounded-full text-foreground hover:bg-secondary"
-          onClick={() => setOpen((v) => !v)}
-        >
-          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+        <div className="flex items-center gap-2 lg:hidden">
+          <ThemeToggle />
+          <button
+            aria-label={open ? "Закрыть меню" : "Открыть меню"}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full text-foreground hover:bg-secondary"
+            onClick={() => setOpen((v) => !v)}
+          >
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
       </div>
 
       {open && (

@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { z } from "zod";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
@@ -175,7 +176,7 @@ const ChatWidget = () => {
     send(input);
   };
 
-  const onContactSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const onContactSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
     const result = contactSchema.safeParse({
@@ -184,6 +185,16 @@ const ChatWidget = () => {
     });
     if (!result.success) {
       toast.error(result.error.issues[0]?.message ?? "Проверьте поля");
+      return;
+    }
+    const lastUserMessage = [...messages].reverse().find((m) => m.role === "user")?.content ?? null;
+    const { error } = await supabase.from("chat_leads").insert({
+      name: result.data.name,
+      contact: result.data.contact,
+      message: lastUserMessage,
+    });
+    if (error) {
+      toast.error("Не удалось отправить. Попробуйте ещё раз.");
       return;
     }
     setContactSent(true);

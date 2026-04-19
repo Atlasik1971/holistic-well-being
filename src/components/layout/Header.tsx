@@ -1,9 +1,10 @@
 import { NavLink, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LayoutDashboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import ThemeToggle from "@/components/theme/ThemeToggle";
+import { useAuth } from "@/components/auth/AuthProvider";
 
 const navItems = [
   { to: "/", label: "Главная" },
@@ -17,6 +18,7 @@ const navItems = [
 const Header = () => {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { isAdmin } = useAuth();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -63,6 +65,14 @@ const Header = () => {
 
         <div className="hidden lg:flex items-center gap-3">
           <ThemeToggle />
+          {isAdmin && (
+            <Button asChild variant="quiet" size="sm" className="rounded-full">
+              <Link to="/admin">
+                <LayoutDashboard className="h-4 w-4 mr-1.5" />
+                Админка
+              </Link>
+            </Button>
+          )}
           <Button asChild variant="hero" size="default" className="rounded-full">
             <Link to="/booking">Записаться</Link>
           </Button>

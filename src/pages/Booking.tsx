@@ -9,8 +9,9 @@ import PageHero from "@/components/layout/PageHero";
 import Section from "@/components/layout/Section";
 import { toast } from "sonner";
 import { z } from "zod";
-import { MessageCircle, Send, Phone, Check } from "lucide-react";
+import { MessageCircle, Send, Phone, Check, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 
 type Channel = "telegram" | "whatsapp" | "max";
 
@@ -30,12 +31,19 @@ const formSchema = z.object({
   consent: z.literal(true, { errorMap: () => ({ message: "Нужно согласие" }) }),
 });
 
+const FORMAT_LABEL: Record<string, string> = {
+  "one-time": "Разовая",
+  "ongoing": "Сопровождение",
+  "not-sure": "Не уверен(а)",
+};
+
 const Booking = () => {
   const [channel, setChannel] = useState<Channel | "">("");
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
     const raw = {
@@ -58,6 +66,20 @@ const Booking = () => {
       return;
     }
     setErrors({});
+    setSubmitting(true);
+    const formatLabel = FORMAT_LABEL[result.data.format] ?? result.data.format;
+    const channelLabel = channels.find((c) => c.id === result.data.channel)?.label ?? result.data.channel;
+    const { error } = await supabase.from("bookings").insert({
+      name: result.data.name,
+      contact: `${channelLabel}: ${result.data.contact}`,
+      format: formatLabel + (result.data.withDoctor ? " · в связке с врачом" : ""),
+      request: result.data.request,
+    });
+    setSubmitting(false);
+    if (error) {
+      toast.error("Не удалось отправить заявку. Попробуйте ещё раз.");
+      return;
+    }
     setSubmitted(true);
     toast.success("Заявка отправлена. Я свяжусь с вами в течение 1–2 рабочих дней.");
   };
@@ -215,8 +237,8 @@ const Booking = () => {
                 </div>
 
                 <div className="pt-2">
-                  <Button type="submit" variant="hero" size="xl" className="w-full sm:w-auto">
-                    Отправить заявку
+                  <Button type="submit" variant="hero" size="xl" className="w-full sm:w-auto" disabled={submitting}>
+                    {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : "Отправить заявку"}
                   </Button>
                 </div>
               </form>

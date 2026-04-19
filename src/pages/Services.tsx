@@ -1,93 +1,102 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import PageHero from "@/components/layout/PageHero";
 import Section from "@/components/layout/Section";
-import { Check, Sparkles, ChefHat } from "lucide-react";
+import { Check, Sparkles, ChefHat, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
-const oneTime = [
-  "Подробный разбор анкеты и текущей ситуации",
-  "Обсуждение запроса и реалистичных целей",
-  "Рекомендации по рациону и режиму",
-  "Ориентиры по бытовым привычкам и образу жизни",
-  "Краткое письменное резюме встречи",
-  "Ответы на вопросы в течение оговорённого времени после консультации",
-];
-
-const ongoing = [
-  "Серия консультаций с регулярными встречами",
-  "Постепенная корректировка рациона и режима",
-  "Поддержка между встречами в согласованном формате",
-  "Учёт ваших ощущений, ритма и обратной связи",
-  "Совместная работа с лечащим врачом — по необходимости",
-  "Письменные рекомендации по итогам каждого этапа",
-];
+type Service = {
+  id: string;
+  title: string;
+  description: string | null;
+  duration: string | null;
+  price: string | null;
+};
 
 const Services = () => {
+  const [services, setServices] = useState<Service[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    supabase
+      .from("services")
+      .select("id, title, description, duration, price")
+      .eq("is_published", true)
+      .order("sort_order")
+      .then(({ data }) => {
+        setServices((data ?? []) as Service[]);
+        setLoading(false);
+      });
+  }, []);
+
   return (
     <>
       <PageHero
         eyebrow="Услуги"
-        title="Два понятных формата работы"
+        title="Понятные форматы работы"
         description="Выберите тот, что подходит вашей задаче. Если сомневаетесь — напишите, подскажу."
       />
 
       <Section className="!pt-4">
-        <div className="container-wide grid gap-6 lg:grid-cols-2">
-          {/* РАЗОВАЯ */}
-          <div className="card-soft flex flex-col">
-            <div className="flex items-center gap-3">
-              <Sparkles className="h-5 w-5 text-primary" />
-              <span className="eyebrow">Формат 01</span>
+        <div className="container-wide">
+          {loading ? (
+            <div className="py-16 flex justify-center">
+              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
             </div>
-            <h2 className="mt-4 font-serif text-3xl">Разовая консультация</h2>
-            <p className="mt-3 text-muted-foreground leading-relaxed">
-              Точечный разбор одной задачи. Подходит, когда нужно понять направление и получить
-              опору для самостоятельной работы.
-            </p>
-            <ul className="mt-7 space-y-3">
-              {oneTime.map((x) => (
-                <li key={x} className="flex items-start gap-3 text-[15px] text-foreground/90">
-                  <Check className="mt-1 h-4 w-4 shrink-0 text-primary" />
-                  <span>{x}</span>
-                </li>
+          ) : services.length === 0 ? (
+            <div className="card-soft text-center py-12 text-muted-foreground">
+              Услуги скоро появятся.
+            </div>
+          ) : (
+            <div className="grid gap-6 lg:grid-cols-2">
+              {services.map((s, idx) => (
+                <div
+                  key={s.id}
+                  className={`card-soft flex flex-col ${
+                    idx % 2 === 1 ? "bg-primary-soft/40 border-primary/20" : ""
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <Sparkles className="h-5 w-5 text-primary" />
+                    <span className="eyebrow">
+                      Формат {String(idx + 1).padStart(2, "0")}
+                    </span>
+                  </div>
+                  <h2 className="mt-4 font-serif text-3xl">{s.title}</h2>
+                  {s.description && (
+                    <p className="mt-3 text-muted-foreground leading-relaxed whitespace-pre-line">
+                      {s.description}
+                    </p>
+                  )}
+                  {(s.duration || s.price) && (
+                    <ul className="mt-7 space-y-3">
+                      {s.duration && (
+                        <li className="flex items-start gap-3 text-[15px] text-foreground/90">
+                          <Check className="mt-1 h-4 w-4 shrink-0 text-primary" />
+                          <span>Длительность: {s.duration}</span>
+                        </li>
+                      )}
+                      {s.price && (
+                        <li className="flex items-start gap-3 text-[15px] text-foreground/90">
+                          <Check className="mt-1 h-4 w-4 shrink-0 text-primary" />
+                          <span>Стоимость: {s.price}</span>
+                        </li>
+                      )}
+                    </ul>
+                  )}
+                  <div className="mt-8 pt-6 border-t border-border/60">
+                    <Button asChild variant="hero" size="lg" className="w-full sm:w-auto">
+                      <Link to="/booking">Записаться</Link>
+                    </Button>
+                  </div>
+                </div>
               ))}
-            </ul>
-            <div className="mt-8 pt-6 border-t border-border/60">
-              <Button asChild variant="hero" size="lg" className="w-full sm:w-auto">
-                <Link to="/booking">Записаться на консультацию</Link>
-              </Button>
             </div>
-          </div>
-
-          {/* СОПРОВОЖДЕНИЕ */}
-          <div className="card-soft flex flex-col bg-primary-soft/40 border-primary/20">
-            <div className="flex items-center gap-3">
-              <Sparkles className="h-5 w-5 text-primary" />
-              <span className="eyebrow">Формат 02</span>
-            </div>
-            <h2 className="mt-4 font-serif text-3xl">Сопровождение</h2>
-            <p className="mt-3 text-muted-foreground leading-relaxed">
-              Системная работа на нескольких встречах. Подходит, когда задача требует постепенной
-              перестройки и поддержки на пути.
-            </p>
-            <ul className="mt-7 space-y-3">
-              {ongoing.map((x) => (
-                <li key={x} className="flex items-start gap-3 text-[15px] text-foreground/90">
-                  <Check className="mt-1 h-4 w-4 shrink-0 text-primary" />
-                  <span>{x}</span>
-                </li>
-              ))}
-            </ul>
-            <div className="mt-8 pt-6 border-t border-border/60">
-              <Button asChild variant="hero" size="lg" className="w-full sm:w-auto">
-                <Link to="/booking">Обсудить сопровождение</Link>
-              </Button>
-            </div>
-          </div>
+          )}
         </div>
       </Section>
 
-      {/* ДОПОЛНИТЕЛЬНО — РЕЦЕПТЫ */}
       <Section tone="muted">
         <div className="container-wide grid gap-8 md:grid-cols-12 items-start">
           <div className="md:col-span-1">
@@ -116,7 +125,6 @@ const Services = () => {
         </div>
       </Section>
 
-      {/* ЮРИДИЧЕСКОЕ */}
       <Section>
         <div className="container-narrow">
           <div className="card-soft border-primary/20">

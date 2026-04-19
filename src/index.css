@@ -174,4 +174,6 @@
   .divider-dot {
     @apply mx-auto my-12 md:my-20 h-1 w-1 rounded-full bg-primary/40;
   }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 }

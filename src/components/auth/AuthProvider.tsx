@@ -7,6 +7,7 @@ type AuthCtx = {
   user: User | null;
   isAdmin: boolean;
   loading: boolean;
+  roleLoading: boolean;
   signOut: () => Promise<void>;
 };
 
@@ -15,6 +16,7 @@ const Ctx = createContext<AuthCtx>({
   user: null,
   isAdmin: false,
   loading: true,
+  roleLoading: false,
   signOut: async () => {},
 });
 
@@ -22,23 +24,33 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [roleLoading, setRoleLoading] = useState(false);
 
   useEffect(() => {
     // Подписка на изменения сессии — ОБЯЗАТЕЛЬНО до getSession
     const { data: sub } = supabase.auth.onAuthStateChange((_event, newSession) => {
       setSession(newSession);
       if (newSession?.user) {
+        setRoleLoading(true);
         // Откладываем запрос к БД, чтобы не вложиться в коллбэк auth
-        setTimeout(() => checkAdmin(newSession.user.id), 0);
+        setTimeout(() => {
+          checkAdmin(newSession.user.id).finally(() => setRoleLoading(false));
+        }, 0);
       } else {
         setIsAdmin(false);
+        setRoleLoading(false);
       }
     });
 
     supabase.auth.getSession().then(({ data: { session: s } }) => {
       setSession(s);
       if (s?.user) {
-        checkAdmin(s.user.id).finally(() => setLoading(false));
+        setRoleLoading(true);
+        checkAdmin(s.user.id)
+          .finally(() => {
+            setRoleLoading(false);
+            setLoading(false);
+          });
       } else {
         setLoading(false);
       }
@@ -66,7 +78,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <Ctx.Provider
-      value={{ session, user: session?.user ?? null, isAdmin, loading, signOut }}
+      value={{ session, user: session?.user ?? null, isAdmin, loading, roleLoading, signOut }}
     >
       {children}
     </Ctx.Provider>

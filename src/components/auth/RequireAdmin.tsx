@@ -3,10 +3,10 @@ import { useAuth } from "./AuthProvider";
 import { Loader2 } from "lucide-react";
 
 const RequireAdmin = ({ children }: { children: JSX.Element }) => {
-  const { session, isAdmin, loading } = useAuth();
+  const { session, isAdmin, loading, roleLoading } = useAuth();
   const location = useLocation();
 
-  if (loading) {
+  if (loading || roleLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />

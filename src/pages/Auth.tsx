@@ -17,15 +17,15 @@ const schema = z.object({
 const Auth = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { session, isAdmin, loading: authLoading } = useAuth();
+  const { session, isAdmin, loading: authLoading, roleLoading } = useAuth();
   const [loading, setLoading] = useState(false);
   const from = (location.state as { from?: string } | null)?.from ?? "/admin";
 
   useEffect(() => {
-    if (!authLoading && session) {
-      navigate(isAdmin ? from : "/", { replace: true });
-    }
-  }, [session, isAdmin, authLoading, from, navigate]);
+    if (authLoading || roleLoading) return;
+    if (!session) return;
+    navigate(isAdmin ? from : "/", { replace: true });
+  }, [session, isAdmin, authLoading, roleLoading, from, navigate]);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -43,12 +43,13 @@ const Auth = () => {
       email: parsed.data.email,
       password: parsed.data.password,
     });
-    setLoading(false);
     if (error) {
+      setLoading(false);
       toast.error(error.message === "Invalid login credentials" ? "Неверный email или пароль" : error.message);
       return;
     }
     toast.success("Вход выполнен");
+    // Не сбрасываем loading — спиннер крутится до редиректа после проверки роли
   };
 
   return (

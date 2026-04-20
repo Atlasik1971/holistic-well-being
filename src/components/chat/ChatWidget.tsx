@@ -128,7 +128,7 @@ const ChatWidget = () => {
       <button
         type="button"
         aria-label={open ? "Закрыть чат" : "Открыть чат"}
-        onClick={() => setOpen((v) => !v)}
+        onClick={toggleChat}
         className={cn(
           "fixed z-50 bottom-5 right-5 md:bottom-6 md:right-6",
           "inline-flex h-14 w-14 items-center justify-center rounded-full",
@@ -164,7 +164,7 @@ const ChatWidget = () => {
               </div>
             </div>
             <button
-              onClick={() => setOpen(false)}
+              onClick={closeChat}
               aria-label="Закрыть чат"
               className="inline-flex h-9 w-9 items-center justify-center rounded-full hover:bg-background/60 text-foreground/70"
             >
@@ -187,117 +187,95 @@ const ChatWidget = () => {
               </div>
             </div>
 
-            {!sent ? (
-              <form onSubmit={onSubmit} className="rounded-xl border border-border bg-card p-3 space-y-3">
-                <div className="space-y-1.5">
-                  <label htmlFor="chat-name" className="text-xs font-medium text-foreground/80">
-                    Имя
-                  </label>
-                  <Input
-                    id="chat-name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Как к вам обращаться"
-                    maxLength={80}
-                    required
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label htmlFor="chat-phone" className="text-xs font-medium text-foreground/80">
-                    Телефон
-                  </label>
-                  <Input
-                    id="chat-phone"
-                    type="tel"
-                    inputMode="tel"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    placeholder="+7 (___) ___-__-__"
-                    maxLength={30}
-                    required
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label htmlFor="chat-question" className="text-xs font-medium text-foreground/80">
-                    Ваш вопрос
-                  </label>
-                  <Textarea
-                    id="chat-question"
-                    value={question}
-                    onChange={(e) => setQuestion(e.target.value)}
-                    placeholder="Опишите вопрос, ответа на который вы не нашли на сайте"
-                    maxLength={1000}
-                    rows={4}
-                    className="resize-none text-sm"
-                    required
-                  />
-                  <div className="text-[11px] text-muted-foreground text-right">
-                    {question.length}/1000
-                  </div>
-                </div>
-
-                <label className="flex items-start gap-2.5 cursor-pointer">
-                  <Checkbox
-                    checked={consent}
-                    onCheckedChange={(v) => setConsent(v === true)}
-                    className="mt-0.5"
-                    aria-label="Согласие на обработку персональных данных"
-                  />
-                  <span className="text-[12px] text-muted-foreground leading-relaxed">
-                    Согласен(на) на обработку персональных данных согласно{" "}
-                    <Link
-                      to="/privacy"
-                      className="underline text-primary"
-                      onClick={() => setOpen(false)}
-                    >
-                      политике конфиденциальности
-                    </Link>
-                    .
-                  </span>
+            <form onSubmit={onSubmit} className="rounded-xl border border-border bg-card p-3 space-y-3">
+              <div className="space-y-1.5">
+                <label htmlFor="chat-name" className="text-xs font-medium text-foreground/80">
+                  Имя
                 </label>
+                <Input
+                  id="chat-name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Как к вам обращаться"
+                  maxLength={80}
+                  required
+                />
+              </div>
 
-                <Button
-                  type="submit"
-                  variant="hero"
-                  className="w-full"
-                  disabled={!canSubmit}
-                >
-                  {submitting ? (
-                    <>
-                      <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                      Отправка…
-                    </>
-                  ) : (
-                    <>
-                      <Send className="h-4 w-4 mr-2" />
-                      Отправить
-                    </>
-                  )}
-                </Button>
-              </form>
-            ) : (
-              <div className="flex justify-start">
-                <div className="max-w-[90%] rounded-2xl rounded-bl-sm px-4 py-3 text-[14.5px] leading-relaxed bg-secondary text-foreground space-y-2">
-                  <p className="m-0">
-                    Спасибо, <strong className="font-medium">{sentName}</strong>! Ваш вопрос получен.
-                    Я свяжусь с вами по номеру{" "}
-                    <code className="px-1 py-0.5 rounded bg-background/80 text-[13px]">
-                      {sentPhone}
-                    </code>{" "}
-                    в течение 1–2 рабочих дней.
-                  </p>
-                  <button
-                    type="button"
-                    onClick={resetForm}
-                    className="text-xs text-primary hover:text-primary-deep underline underline-offset-2"
-                  >
-                    Отправить ещё один вопрос
-                  </button>
+              <div className="space-y-1.5">
+                <label htmlFor="chat-phone" className="text-xs font-medium text-foreground/80">
+                  Телефон
+                </label>
+                <Input
+                  id="chat-phone"
+                  type="tel"
+                  inputMode="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="+7 (___) ___-__-__"
+                  maxLength={30}
+                  required
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label htmlFor="chat-question" className="text-xs font-medium text-foreground/80">
+                  Ваш вопрос
+                </label>
+                <Textarea
+                  id="chat-question"
+                  value={question}
+                  onChange={(e) => setQuestion(e.target.value)}
+                  placeholder="Опишите вопрос, ответа на который вы не нашли на сайте"
+                  maxLength={1000}
+                  rows={4}
+                  className="resize-none text-sm"
+                  required
+                />
+                <div className="text-[11px] text-muted-foreground text-right">
+                  {question.length}/1000
                 </div>
               </div>
-            )}
+
+              <label className="flex items-start gap-2.5 cursor-pointer">
+                <Checkbox
+                  checked={consent}
+                  onCheckedChange={(v) => setConsent(v === true)}
+                  className="mt-0.5"
+                  aria-label="Согласие на обработку персональных данных"
+                />
+                <span className="text-[12px] text-muted-foreground leading-relaxed">
+                  Согласен(на) на обработку персональных данных согласно{" "}
+                  <Link
+                    to="/privacy"
+                    className="underline text-primary"
+                    onClick={closeChat}
+                  >
+                    политике конфиденциальности
+                  </Link>
+                  .
+                </span>
+              </label>
+
+              <Button
+                type="submit"
+                variant="hero"
+                className="w-full"
+                disabled={!canSubmit}
+              >
+                {submitting ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                    Отправка…
+                  </>
+                ) : (
+                  <>
+                    <Send className="h-4 w-4 mr-2" />
+                    Отправить
+                  </>
+                )}
+              </Button>
+            </form>
           </div>
 
           <div className="px-4 py-2 text-[11px] text-muted-foreground text-center bg-card border-t border-border/60">

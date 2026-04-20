@@ -116,12 +116,14 @@ Deno.serve(async (req: Request) => {
 
   try {
     const TELEGRAM_BOT_TOKEN = Deno.env.get("TELEGRAM_BOT_TOKEN");
-    const ADMIN_TELEGRAM_CHAT_ID = Deno.env.get("ADMIN_TELEGRAM_CHAT_ID");
+    const ADMIN_TELEGRAM_CHAT_ID =
+      Deno.env.get("TELEGRAM_CHAT_ID") ??
+      Deno.env.get("ADMIN_TELEGRAM_CHAT_ID");
 
     if (!TELEGRAM_BOT_TOKEN)
       throw new Error("TELEGRAM_BOT_TOKEN is not configured");
     if (!ADMIN_TELEGRAM_CHAT_ID)
-      throw new Error("ADMIN_TELEGRAM_CHAT_ID is not configured");
+      throw new Error("TELEGRAM_CHAT_ID / ADMIN_TELEGRAM_CHAT_ID is not configured");
 
     const payload = (await req.json()) as Payload;
     const validationError = validate(payload);

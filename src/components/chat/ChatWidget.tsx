@@ -66,19 +66,44 @@ const ChatWidget = () => {
       return;
     }
     setSubmitting(true);
+
     const { error } = await supabase.from("chat_leads").insert({
       name: result.data.name,
       contact: result.data.phone,
       message: result.data.question,
     });
-    setSubmitting(false);
+
+    // Fallback: если запись в БД не удалась — пробуем отправить заявку
+    // напрямую в Telegram через edge-функцию, чтобы не потерять контакт.
     if (error) {
-      toast.error("Не удалось отправить. Попробуйте ещё раз.");
-      return;
+      const { error: fnError } = await supabase.functions.invoke(
+        "notify-telegram",
+        {
+          body: {
+            source: "website_form",
+            name: result.data.name,
+            phone: result.data.phone,
+            message: result.data.question,
+          },
+        },
+      );
+      if (fnError) {
+        setSubmitting(false);
+        toast.error("Не удалось отправить. Попробуйте ещё раз.");
+        return;
+      }
     }
+
+    setSubmitting(false);
     setSentName(result.data.name);
     setSentPhone(result.data.phone);
     setSent(true);
+    // Очищаем поля сразу после успеха, чтобы при повторном открытии
+    // форма была чистой.
+    setName("");
+    setPhone("");
+    setQuestion("");
+    setConsent(false);
     toast.success("Спасибо! Я свяжусь с вами в течение 1–2 рабочих дней.");
   };
 

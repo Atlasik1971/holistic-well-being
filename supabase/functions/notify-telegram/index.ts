@@ -1,5 +1,6 @@
-// Edge function: receives DB trigger payload and sends Telegram notification
-const GATEWAY_URL = "https://connector-gateway.lovable.dev/telegram";
+// Edge function: sends Telegram notifications via direct Bot API call.
+// Supports DB trigger payloads (booking, contact_message, chat_lead) and
+// direct website form submissions (website_form).
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -7,11 +8,16 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
-type Source = "booking" | "contact_message" | "chat_lead";
+type Source = "booking" | "contact_message" | "chat_lead" | "website_form";
 
 interface Payload {
   source: Source;
-  record: Record<string, unknown>;
+  record?: Record<string, unknown>;
+  // website_form fields
+  name?: string;
+  phone?: string;
+  contact?: string;
+  message?: string;
 }
 
 const escapeHtml = (s: string) =>
@@ -20,10 +26,34 @@ const escapeHtml = (s: string) =>
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;");
 
+const safe = (v: unknown, fallback = "—") => {
+  if (v === null || v === undefined) return fallback;
+  const s = String(v).trim();
+  return s ? escapeHtml(s) : fallback;
+};
+
+const formatDate = () => {
+  const d = new Date();
+  return d.toLocaleString("ru-RU", {
+    timeZone: "Europe/Moscow",
+    dateStyle: "short",
+    timeStyle: "short",
+  });
+};
+
 const formatMessage = (p: Payload): string => {
-  const r = p.record as Record<string, string | null>;
-  const safe = (v: string | null | undefined, fallback = "—") =>
-    v ? escapeHtml(String(v)) : fallback;
+  if (p.source === "website_form") {
+    return [
+      "🆕 <b>Новая заявка с сайта нутрициолога</b>",
+      "",
+      `<b>Имя:</b> ${safe(p.name)}`,
+      `<b>Телефон:</b> ${safe(p.phone ?? p.contact)}`,
+      `<b>Сообщение:</b> ${safe(p.message)}`,
+      `<b>Дата:</b> ${escapeHtml(formatDate())}`,
+    ].join("\n");
+  }
+
+  const r = (p.record ?? {}) as Record<string, unknown>;
 
   if (p.source === "booking") {
     return [
@@ -33,6 +63,7 @@ const formatMessage = (p: Payload): string => {
       `<b>Контакт:</b> ${safe(r.contact)}`,
       `<b>Формат:</b> ${safe(r.format)}`,
       `<b>Запрос:</b> ${safe(r.request)}`,
+      `<b>Дата:</b> ${escapeHtml(formatDate())}`,
     ].join("\n");
   }
   if (p.source === "contact_message") {
@@ -42,6 +73,7 @@ const formatMessage = (p: Payload): string => {
       `<b>Имя:</b> ${safe(r.name)}`,
       `<b>Контакт:</b> ${safe(r.contact)}`,
       `<b>Сообщение:</b> ${safe(r.message)}`,
+      `<b>Дата:</b> ${escapeHtml(formatDate())}`,
     ].join("\n");
   }
   return [
@@ -50,7 +82,31 @@ const formatMessage = (p: Payload): string => {
     `<b>Имя:</b> ${safe(r.name)}`,
     `<b>Контакт:</b> ${safe(r.contact)}`,
     `<b>Вопрос:</b> ${safe(r.message)}`,
+    `<b>Дата:</b> ${escapeHtml(formatDate())}`,
   ].join("\n");
+};
+
+const validate = (p: Payload): string | null => {
+  if (!p?.source) return "missing source";
+  const allowed: Source[] = [
+    "booking",
+    "contact_message",
+    "chat_lead",
+    "website_form",
+  ];
+  if (!allowed.includes(p.source)) return "invalid source";
+
+  if (p.source === "website_form") {
+    const name = (p.name ?? "").trim();
+    const phone = (p.phone ?? p.contact ?? "").trim();
+    const message = (p.message ?? "").trim();
+    if (name.length < 2 || name.length > 200) return "invalid name";
+    if (phone.length < 3 || phone.length > 200) return "invalid phone";
+    if (message.length > 4000) return "message too long";
+  } else {
+    if (!p.record || typeof p.record !== "object") return "missing record";
+  }
+  return null;
 };
 
 Deno.serve(async (req: Request) => {
@@ -59,23 +115,19 @@ Deno.serve(async (req: Request) => {
   }
 
   try {
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    const TELEGRAM_API_KEY = Deno.env.get("TELEGRAM_API_KEY");
+    const TELEGRAM_BOT_TOKEN = Deno.env.get("TELEGRAM_BOT_TOKEN");
     const ADMIN_TELEGRAM_CHAT_ID = Deno.env.get("ADMIN_TELEGRAM_CHAT_ID");
 
-    if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
-    if (!TELEGRAM_API_KEY)
-      throw new Error("TELEGRAM_API_KEY is not configured");
+    if (!TELEGRAM_BOT_TOKEN)
+      throw new Error("TELEGRAM_BOT_TOKEN is not configured");
     if (!ADMIN_TELEGRAM_CHAT_ID)
       throw new Error("ADMIN_TELEGRAM_CHAT_ID is not configured");
 
     const payload = (await req.json()) as Payload;
-    if (
-      !payload?.source ||
-      !["booking", "contact_message", "chat_lead"].includes(payload.source)
-    ) {
+    const validationError = validate(payload);
+    if (validationError) {
       return new Response(
-        JSON.stringify({ error: "Invalid payload: missing source" }),
+        JSON.stringify({ success: false, error: validationError }),
         {
           status: 400,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -85,13 +137,10 @@ Deno.serve(async (req: Request) => {
 
     const text = formatMessage(payload);
 
-    const response = await fetch(`${GATEWAY_URL}/sendMessage`, {
+    const tgUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+    const response = await fetch(tgUrl, {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
-        "X-Connection-Api-Key": TELEGRAM_API_KEY,
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         chat_id: ADMIN_TELEGRAM_CHAT_ID,
         text,
@@ -101,10 +150,17 @@ Deno.serve(async (req: Request) => {
     });
 
     const data = await response.json();
-    if (!response.ok) {
+    if (!response.ok || !data.ok) {
       console.error("Telegram API error", response.status, data);
-      throw new Error(
-        `Telegram API call failed [${response.status}]: ${JSON.stringify(data)}`,
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: `Telegram API [${response.status}]: ${data?.description ?? JSON.stringify(data)}`,
+        }),
+        {
+          status: 502,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        },
       );
     }
 
@@ -113,8 +169,7 @@ Deno.serve(async (req: Request) => {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (error: unknown) {
-    const message =
-      error instanceof Error ? error.message : "Unknown error";
+    const message = error instanceof Error ? error.message : "Unknown error";
     console.error("notify-telegram error:", message);
     return new Response(
       JSON.stringify({ success: false, error: message }),

@@ -95,19 +95,14 @@ const ChatWidget = () => {
     }
 
     setSubmitting(false);
-    setSentName(result.data.name);
-    setSentPhone(result.data.phone);
-    setSent(true);
-    // Очищаем поля сразу после успеха, чтобы при повторном открытии
-    // форма была чистой.
-    setName("");
-    setPhone("");
-    setQuestion("");
-    setConsent(false);
     toast.success("Спасибо! Я свяжусь с вами в течение 1–2 рабочих дней.");
+    // Полный сброс state и автозакрытие чата.
+    resetState();
+    setOpen(false);
   };
 
-  const resetForm = () => {
+  // Полный сброс всего состояния виджета (поля, success/error, черновики).
+  const resetState = () => {
     setName("");
     setPhone("");
     setQuestion("");
@@ -115,6 +110,13 @@ const ChatWidget = () => {
     setSent(false);
     setSentName("");
     setSentPhone("");
+    setSubmitting(false);
+  };
+
+  // Закрытие — всегда с очисткой state. Никакой истории/черновиков.
+  const closeChat = () => {
+    setOpen(false);
+    resetState();
   };
 
   return (

@@ -37,15 +37,38 @@ const ChatWidget = () => {
   const [question, setQuestion] = useState("");
   const [consent, setConsent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [sent, setSent] = useState(false);
-  const [sentName, setSentName] = useState("");
-  const [sentPhone, setSentPhone] = useState("");
 
-  // Закрытие по Escape
+  // Полный сброс state виджета (поля, согласие, submitting).
+  // Никакая история / черновики / success не сохраняются.
+  const resetState = () => {
+    setName("");
+    setPhone("");
+    setQuestion("");
+    setConsent(false);
+    setSubmitting(false);
+  };
+
+  // Любое закрытие чата — с очисткой state.
+  const closeChat = () => {
+    setOpen(false);
+    resetState();
+  };
+
+  // Тоггл FAB: открытие — чисто, закрытие — со сбросом.
+  const toggleChat = () => {
+    if (open) {
+      closeChat();
+    } else {
+      resetState();
+      setOpen(true);
+    }
+  };
+
+  // Закрытие по Escape — со сбросом.
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape") closeChat();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);

@@ -1,76 +1,49 @@
 
 
-## Проблема
+## Что чиню в чат-виджете
 
-Логи показывают: вход на самом деле проходит успешно (Supabase вернул токен 200, роль admin подтверждена). Но юзеру кажется, что «кнопка не работает», потому что после входа происходит **неправильный редирект**: страница уходит не в `/admin`, а на главную `/`.
+Логика отправки уже корректная: форма пишет в `chat_leads`, сервер дублирует в Telegram. Токен на клиент не утекает — он живёт только в Edge Function. Дизайн модалки, скролл, footer и высота уже настроены правильно. Поэтому правки минимальные и без изменений UI.
 
-### Почему так
+## Что меняю
 
-В `src/pages/Auth.tsx`:
+### 1. `src/components/chat/ChatWidget.tsx` — мелкие правки логики
+- После успеха **очищать поля формы сразу** (а не только при клике «Отправить ещё один вопрос»), чтобы при повторном открытии форма была чистой.
+- Добавить лёгкий fallback: если `supabase.from(...).insert(...)` упал — попробовать вызвать edge-функцию `notify-telegram` напрямую (`supabase.functions.invoke`) с `source: "website_form"`, чтобы заявка не пропала. Это не меняет дизайн — только надёжность.
+- Никаких изменений в верстке, классах, высоте окна, скроллах, заголовке и подвале.
+
+### 2. `supabase/functions/notify-telegram/index.ts` — поддержка `TELEGRAM_CHAT_ID`
+Сейчас функция читает только `ADMIN_TELEGRAM_CHAT_ID`. Добавлю чтение в порядке:
 ```ts
-useEffect(() => {
-  if (!authLoading && session) {
-    navigate(isAdmin ? from : "/", { replace: true });
-  }
-}, [session, isAdmin, authLoading, ...]);
+const chatId = Deno.env.get("TELEGRAM_CHAT_ID") ?? Deno.env.get("ADMIN_TELEGRAM_CHAT_ID");
+```
+Так старый секрет продолжит работать, и новое имя из ТЗ тоже.
+
+`TELEGRAM_BOT_TOKEN` уже используется как просили.
+
+### 3. Что НЕ трогаю
+- Дизайн модалки, высоту 640px / `max-h-[80vh]`, `flex flex-col`, `overflow-y-auto` контента, sticky-подвал «Чат не заменяет консультацию врача» — всё остаётся.
+- Триггер БД `notify_telegram_on_insert` уже настроен на `chat_leads` и сам дёргает edge-функцию — менять не нужно.
+- Админка `/admin/chat-leads` уже отображает заявки из `chat_leads` — менять не нужно.
+- Клиент НЕ получает токен — он живёт в секретах Edge Function.
+
+## Поток данных (после правок)
+
+```text
+Browser (ChatWidget)
+   │  insert into chat_leads (RLS: anyone can insert)
+   ▼
+Supabase DB ── trigger ──► notify-telegram (Edge Function)
+                                   │  fetch Telegram Bot API
+                                   ▼
+                        Telegram-группа админа
 ```
 
-Гонка состояний в `AuthProvider`:
-1. `signInWithPassword` → срабатывает `onAuthStateChange` → `setSession(newSession)` мгновенно
-2. `checkAdmin()` запускается через `setTimeout` и идёт в БД (~100–300 мс)
-3. Между этими событиями реакт ререндерит `Auth.tsx`: `session=true`, `isAdmin=false` (старое значение), `authLoading=false`
-4. Эффект отрабатывает первым → `navigate("/")` → юзер оказывается на главной
-5. Через миг приходит роль admin — но пользователь уже не на `/auth`, и `Header` тихо показывает кнопку «Админка», которую он не замечает
+Если БД-вставка упала, клиент дополнительно зовёт `notify-telegram` напрямую с `source: "website_form"` — заявка всё равно дойдёт в Telegram.
 
-Итог: с точки зрения пользователя кнопка «Войти» «ничего не делает» — он просто моргнул и снова на сайте.
+## Файлы, которые покажу после применения
+- `src/components/chat/ChatWidget.tsx`
+- `supabase/functions/notify-telegram/index.ts`
 
-## Решение
-
-Чинно дождаться, пока роль реально проверится, прежде чем редиректить. Меняем два маленьких места — без изменений дизайна.
-
-### 1. `src/components/auth/AuthProvider.tsx`
-
-Добавить отдельный флаг `roleLoading`, чтобы понимать, закончилась ли проверка роли для текущей сессии:
-- При появлении сессии: `setRoleLoading(true)` → `checkAdmin` → `setRoleLoading(false)` в `finally`
-- При выходе: `setRoleLoading(false)`
-- Экспортировать его в контексте (`roleLoading`)
-
-### 2. `src/pages/Auth.tsx`
-
-Изменить условие редиректа так, чтобы дождаться окончания проверки роли:
-```ts
-useEffect(() => {
-  if (authLoading || roleLoading) return;
-  if (!session) return;
-  navigate(isAdmin ? from : "/", { replace: true });
-}, [session, isAdmin, authLoading, roleLoading, from, navigate]);
-```
-
-Заодно после `signInWithPassword` НЕ делаем `setLoading(false)` сразу — оставляем спиннер на кнопке до момента, когда `roleLoading` станет `false` и редирект произойдёт. Это даст пользователю явный визуальный фидбэк «идёт вход», а не «ничего не происходит».
-
-### 3. (бонус) `src/components/auth/RequireAdmin.tsx`
-
-Тоже учитываем `roleLoading`, иначе он успеет показать «Нет доступа» в момент гонки:
-```ts
-if (loading || roleLoading) return <spinner />;
-```
-
-## Что НЕ меняем
-
-- Дизайн `/auth`, footer, шапку
-- Учётные данные `admin@example.com / Admin123!`
-- Логику Supabase, роли, RLS
-- Роуты
-
-## Технические детали
-
-- Файлы: `src/components/auth/AuthProvider.tsx`, `src/pages/Auth.tsx`, `src/components/auth/RequireAdmin.tsx`
-- Новое поле в `AuthCtx`: `roleLoading: boolean`
-- Спиннер на кнопке «Войти» держим до завершения редиректа
-
-## Результат
-
-- Жмёшь «Войти» → кнопка крутится → сразу попадаешь в `/admin` (а не на главную и обратно)
-- Никаких визуальных «ничего не произошло»
-- `RequireAdmin` больше не мигает страницей «Нет доступа» в момент проверки роли
+## Что нужно от вас
+Если хотите использовать имя секрета `TELEGRAM_CHAT_ID` (а не текущий `ADMIN_TELEGRAM_CHAT_ID`) — добавлю запрос секрета после одобрения. Если оставляем текущий — ничего делать не нужно, всё уже работает.
 

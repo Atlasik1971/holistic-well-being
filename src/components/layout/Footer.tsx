@@ -45,9 +45,9 @@ const Footer = () => {
           </div>
           <Link
             to={adminHref}
-            className="text-muted-foreground/40 hover:text-muted-foreground/70 transition-colors md:ml-6 self-start md:self-auto"
+            className="text-muted-foreground/20 hover:text-muted-foreground/50 transition-colors md:ml-6 self-start md:self-auto lowercase"
           >
-            Админка
+            admin
           </Link>
         </div>
       </div>

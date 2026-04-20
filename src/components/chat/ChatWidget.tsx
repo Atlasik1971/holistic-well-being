@@ -117,29 +117,9 @@ const ChatWidget = () => {
       }
     }
 
-    setSubmitting(false);
     toast.success("Спасибо! Я свяжусь с вами в течение 1–2 рабочих дней.");
-    // Полный сброс state и автозакрытие чата.
-    resetState();
-    setOpen(false);
-  };
-
-  // Полный сброс всего состояния виджета (поля, success/error, черновики).
-  const resetState = () => {
-    setName("");
-    setPhone("");
-    setQuestion("");
-    setConsent(false);
-    setSent(false);
-    setSentName("");
-    setSentPhone("");
-    setSubmitting(false);
-  };
-
-  // Закрытие — всегда с очисткой state. Никакой истории/черновиков.
-  const closeChat = () => {
-    setOpen(false);
-    resetState();
+    // Автозакрытие чата с полным сбросом state.
+    closeChat();
   };
 
   return (

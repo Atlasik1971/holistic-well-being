@@ -1,16 +1,16 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Section from "@/components/layout/Section";
-import { ArrowRight, Check, X, ShieldCheck, Stethoscope } from "lucide-react";
+import { ArrowRight, Check, ShieldCheck, Sparkles, HeartHandshake, Leaf } from "lucide-react";
 import heroImage from "@/assets/hero-herbs.jpg";
 
 const topics = [
-  "Питание при особенностях образа жизни и нагрузках",
-  "Поддержка после консервативного лечения, в связке с врачом",
-  "Работа с пищевыми привычками и режимом",
-  "Сопровождение в подборе бытовых и пищевых решений",
-  "Состояния, связанные с самочувствием и энергией",
-  "Поддержка в период восстановления и адаптации",
+  "Энергия и стабильное самочувствие в течение дня",
+  "Питание под ваш ритм жизни и нагрузки",
+  "Работа с пищевыми привычками без давления",
+  "Поддержка веса и комфортных отношений с едой",
+  "Режим сна, восстановления и опор в рутине",
+  "Сезонная адаптация и спокойный переход к новому рациону",
 ];
 
 const formats = [
@@ -20,15 +20,8 @@ const formats = [
   },
   {
     title: "Сопровождение",
-    text: "Системная работа в формате нескольких встреч с корректировками, обратной связью и поддержкой.",
+    text: "Системная работа на несколько встреч: разбираем рацион и режим, корректируем по ходу, держим контакт между сессиями.",
   },
-];
-
-const notWorking = [
-  "Не ставлю диагнозы и не отменяю назначения врачей",
-  "Не работаю с заболеваниями — это компетенция врача",
-  "Не назначаю лекарственные препараты",
-  "Не обещаю медицинских результатов",
 ];
 
 const steps = [
@@ -46,32 +39,33 @@ const Index = () => {
         <div className="container-wide pt-10 md:pt-16 pb-16 md:pb-24">
           <div className="grid gap-10 lg:gap-16 lg:grid-cols-12 items-center">
             <div className="lg:col-span-7 animate-fade-up">
-              <div className="eyebrow mb-6">Консультационное сопровождение</div>
+              <div className="eyebrow mb-6">Клинический нутрициолог</div>
               <h1 className="max-w-2xl">
-                Питание и образ жизни — спокойно, по делу и в связке с вашим врачом
+                Питание, в котором вам спокойно — каждый день
               </h1>
               <p className="mt-6 max-w-xl text-lg text-muted-foreground leading-relaxed">
-                Помогаю выстроить устойчивый рацион и режим дня после консервативного лечения.
-                Не заменяю медицинскую помощь — работаю рядом с врачами, а не вместо них.
+                Помогаю выстроить рацион и режим под вашу жизнь, тело и задачи. Без жёстких диет
+                и универсальных схем — только понятная система, которая работает в долгую.
               </p>
               <div className="mt-9 flex flex-wrap gap-3">
                 <Button asChild variant="hero" size="xl">
                   <Link to="/booking">
-                    Записаться <ArrowRight className="ml-1 h-4 w-4" />
+                    Записаться на консультацию <ArrowRight className="ml-1 h-4 w-4" />
                   </Link>
-                </Button>
-                <Button asChild variant="quiet" size="xl">
-                  <Link to="/services">Посмотреть услуги</Link>
                 </Button>
               </div>
               <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-muted-foreground">
                 <div className="flex items-center gap-2">
-                  <ShieldCheck className="h-4 w-4 text-primary" />
-                  Этичный подход
+                  <Sparkles className="h-4 w-4 text-primary" />
+                  Персональный подход
                 </div>
                 <div className="flex items-center gap-2">
-                  <Stethoscope className="h-4 w-4 text-primary" />
-                  Работа в связке с врачами
+                  <HeartHandshake className="h-4 w-4 text-primary" />
+                  Бережное сопровождение
+                </div>
+                <div className="flex items-center gap-2">
+                  <Leaf className="h-4 w-4 text-primary" />
+                  Реалистичный результат
                 </div>
               </div>
             </div>
@@ -96,10 +90,10 @@ const Index = () => {
           <div className="grid gap-10 md:gap-14 md:grid-cols-12">
             <div className="md:col-span-4">
               <div className="eyebrow mb-5">С чем работаю</div>
-              <h2>С какими темами я работаю</h2>
+              <h2>С какими запросами ко мне приходят</h2>
               <p className="mt-5 text-muted-foreground leading-relaxed">
-                Точные темы и формулировки уточняем на консультации — каждая ситуация рассматривается
-                индивидуально и в рамках компетенций нутрициолога.
+                Точные темы и формулировки уточняем на консультации — каждая ситуация
+                рассматривается индивидуально, с учётом вашего ритма и контекста.
               </p>
             </div>
             <ul className="md:col-span-8 grid gap-3 sm:grid-cols-2">
@@ -144,33 +138,8 @@ const Index = () => {
         </div>
       </Section>
 
-      {/* С ЧЕМ НЕ РАБОТАЮ */}
-      <Section tone="soft">
-        <div className="container-wide grid gap-10 md:grid-cols-12">
-          <div className="md:col-span-5">
-            <div className="eyebrow mb-5">Границы</div>
-            <h2>С чем я не работаю</h2>
-            <p className="mt-5 text-muted-foreground leading-relaxed">
-              Чёткое понимание границ — часть профессионального подхода. Это бережно и для вас,
-              и для совместной работы с врачом.
-            </p>
-          </div>
-          <ul className="md:col-span-7 space-y-3">
-            {notWorking.map((t) => (
-              <li
-                key={t}
-                className="flex items-start gap-3 rounded-xl bg-background/70 px-5 py-4 border border-border/60"
-              >
-                <X className="mt-0.5 h-4 w-4 shrink-0 text-primary-deep" />
-                <span className="text-[15px] text-foreground/90">{t}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </Section>
-
       {/* КАК ПРОХОДИТ ЗАПИСЬ */}
-      <Section>
+      <Section tone="soft">
         <div className="container-wide">
           <div className="max-w-2xl">
             <div className="eyebrow mb-5">Запись</div>
@@ -213,7 +182,7 @@ const Index = () => {
         </div>
       </Section>
 
-      {/* ЮРИДИЧЕСКИЙ БЛОК */}
+      {/* ОТВЕТСТВЕННЫЙ ПОДХОД */}
       <Section>
         <div className="container-wide">
           <div className="card-soft border-primary/20 bg-primary-soft/30">
@@ -222,17 +191,18 @@ const Index = () => {
                 <ShieldCheck className="h-8 w-8 text-primary" />
               </div>
               <div>
-                <h3 className="font-serif text-xl">Этический и юридический ориентир</h3>
+                <h3 className="font-serif text-xl">Ответственный подход</h3>
                 <p className="mt-3 text-muted-foreground leading-relaxed">
-                  Я не заменяю врача. Работаю с состояниями здоровья и образом жизни в рамках
-                  компетенций нутрициолога. Лечением заболеваний занимаются врачи. Консультационное
-                  сопровождение строится в связке с лечащим специалистом и после консервативного лечения.
+                  Я работаю в зоне питания и образа жизни — это компетенция нутрициолога.
+                  Диагностикой и лечением заболеваний занимается врач. Если у вас есть
+                  медицинский диагноз, рекомендации согласуются с лечащим специалистом и не
+                  отменяют его назначений.
                 </p>
                 <ul className="mt-5 space-y-2 text-sm">
                   {[
-                    "Не ставлю диагнозы и не назначаю лечения",
-                    "Не отменяю и не корректирую назначения врачей",
-                    "Все рекомендации — в формате консультационного сопровождения",
+                    "Не ставлю диагнозы и не назначаю лечение",
+                    "Не отменяю назначения врача",
+                    "Работаю как часть вашей общей заботы о здоровье",
                   ].map((x) => (
                     <li key={x} className="flex items-start gap-2 text-foreground/85">
                       <Check className="mt-0.5 h-4 w-4 text-primary shrink-0" />
@@ -249,9 +219,9 @@ const Index = () => {
       {/* CTA */}
       <Section tone="soft" className="!pb-24 md:!pb-32">
         <div className="container-narrow text-center">
-          <h2>Готовы записаться?</h2>
+          <h2>Начнём с разговора</h2>
           <p className="mt-5 text-muted-foreground leading-relaxed">
-            Оставьте заявку — обсудим запрос и подберём удобный формат.
+            Расскажите о запросе — подберём формат, который подойдёт именно вам.
           </p>
           <div className="mt-8">
             <Button asChild variant="hero" size="xl">

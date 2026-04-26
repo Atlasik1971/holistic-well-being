@@ -43,7 +43,7 @@ const Index = () => {
       <section className="relative overflow-hidden">
         <div className="container-wide pt-10 md:pt-16 pb-16 md:pb-24">
           <div className="grid gap-10 lg:gap-16 lg:grid-cols-12 items-center">
-            <div className="lg:col-span-7 animate-fade-up">
+            <div className="lg:col-span-6 animate-fade-up">
               <div className="eyebrow mb-6">Клинический нутрициолог</div>
               <h1 className="max-w-2xl">
                 Питание, в котором вам спокойно — каждый день
@@ -74,7 +74,7 @@ const Index = () => {
                 </div>
               </div>
             </div>
-            <div className="lg:col-span-5">
+            <div className="lg:col-span-6">
               <div className="relative rounded-3xl overflow-hidden shadow-card">
                 {videoFailed ? (
                   <img

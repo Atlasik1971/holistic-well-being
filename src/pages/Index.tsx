@@ -79,18 +79,42 @@ const formats = [
   {
     title: "Разовая консультация",
     text: "Точечный разбор запроса: рацион, режим, бытовые рекомендации и дальнейшие шаги.",
+    backTitle: "Что входит",
+    backText: "Разбор текущего рациона, режима и привычек с первыми шагами, которые легко встроить в ваш ритм.",
   },
   {
     title: "Сопровождение",
     text: "Системная работа на несколько встреч: разбираем рацион и режим, корректируем по ходу, держим контакт между сессиями.",
+    backTitle: "Что даёт",
+    backText: "Поддержку между сессиями, корректировки по динамике и спокойную адаптацию рекомендаций под жизнь.",
   },
 ];
 
 const steps = [
-  { n: "01", title: "Заявка", text: "Оставляете заявку через удобный мессенджер." },
-  { n: "02", title: "Анкета", text: "Заполняете короткую анкету — это помогает подготовиться." },
-  { n: "03", title: "Согласование", text: "Согласуем формат, дату и время встречи." },
-  { n: "04", title: "Встреча", text: "Проводим консультацию. Вы получаете рекомендации в письменном виде." },
+  {
+    n: "01",
+    title: "Заявка",
+    text: "Оставляете заявку через удобный мессенджер.",
+    backText: "Я отвечаю в течение 1-2 рабочих дней и уточняю ваш запрос.",
+  },
+  {
+    n: "02",
+    title: "Анкета",
+    text: "Заполняете короткую анкету — это помогает подготовиться.",
+    backText: "Анкета помогает понять ваш ритм, привычки и приоритеты перед встречей.",
+  },
+  {
+    n: "03",
+    title: "Согласование",
+    text: "Согласуем формат, дату и время встречи.",
+    backText: "Выбираем удобный формат и время, чтобы консультация прошла спокойно.",
+  },
+  {
+    n: "04",
+    title: "Встреча",
+    text: "Проводим консультацию. Вы получаете рекомендации в письменном виде.",
+    backText: "После встречи вы получаете понятные рекомендации и опорные шаги.",
+  },
 ];
 
 const whoFits = [
@@ -226,15 +250,26 @@ const Index = () => {
           </div>
           <div className="mt-10 grid gap-5 md:grid-cols-2">
             {formats.map((f) => (
-              <div key={f.title} className="card-soft">
-                <h3 className="font-serif text-2xl">{f.title}</h3>
-                <p className="mt-3 text-muted-foreground leading-relaxed">{f.text}</p>
-                <Link
-                  to="/services"
-                  className="mt-6 inline-flex items-center gap-1.5 text-sm text-primary hover:text-primary-deep"
-                >
-                  Подробнее <ArrowRight className="h-3.5 w-3.5" />
-                </Link>
+              <div key={f.title} className="nutrition-flip-card max-w-none" tabIndex={0}>
+                <div className="nutrition-flip-card-inner">
+                  <div className="nutrition-flip-card-front items-start text-left">
+                    <p className="nutrition-flip-card-title font-serif">{f.title}</p>
+                    <p className="nutrition-flip-card-text">{f.text}</p>
+                    <p className="mt-1 inline-flex items-center gap-1.5 text-sm text-primary">
+                      Наведите или сфокусируйтесь <ArrowRight className="h-3.5 w-3.5" />
+                    </p>
+                  </div>
+                  <div className="nutrition-flip-card-back items-start text-left">
+                    <p className="nutrition-flip-card-title font-serif">{f.backTitle}</p>
+                    <p className="nutrition-flip-card-text">{f.backText}</p>
+                    <Link
+                      to="/services"
+                      className="mt-2 inline-flex items-center gap-1.5 text-sm text-white/95 hover:text-white underline underline-offset-4"
+                    >
+                      Подробнее о формате <ArrowRight className="h-3.5 w-3.5" />
+                    </Link>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
@@ -253,14 +288,23 @@ const Index = () => {
           </div>
           <ol className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {steps.map((s) => (
-              <li key={s.n} className="card-soft">
-                <div className="flex items-start gap-4">
-                  <span className="accent-icon inline-flex items-center justify-center text-sm font-semibold">
-                    {s.n}
-                  </span>
-                  <h3 className="text-lg">{s.title}</h3>
+              <li key={s.n} className="nutrition-flip-card max-w-none" tabIndex={0}>
+                <div className="nutrition-flip-card-inner">
+                  <div className="nutrition-flip-card-front items-start text-left">
+                    <div className="flex items-start gap-4">
+                      <span className="accent-icon inline-flex items-center justify-center text-sm font-semibold">
+                        {s.n}
+                      </span>
+                      <h3 className="nutrition-flip-card-title text-[1.2rem] font-serif">{s.title}</h3>
+                    </div>
+                    <p className="nutrition-flip-card-text">{s.text}</p>
+                  </div>
+                  <div className="nutrition-flip-card-back items-start text-left">
+                    <p className="text-xs uppercase tracking-[0.2em] text-white/75">Этап {s.n}</p>
+                    <p className="nutrition-flip-card-title text-[1.2rem] font-serif">{s.title}</p>
+                    <p className="nutrition-flip-card-text">{s.backText}</p>
+                  </div>
                 </div>
-                <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{s.text}</p>
               </li>
             ))}
           </ol>

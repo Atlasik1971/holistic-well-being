@@ -65,27 +65,27 @@ const Education = () => {
         <div className="container-wide">
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {documents.map(({ id, title, org, year, icon: Icon }) => (
-              <figure key={id} className="card-soft p-6 flex flex-col">
-                <div
-                  className="relative rounded-xl overflow-hidden aspect-[4/5] flex flex-col items-center justify-center text-center px-6 py-8 border border-primary/15 bg-[radial-gradient(circle_at_top,_hsl(var(--primary-soft))_0%,_hsl(var(--card))_70%)]"
-                  aria-hidden="true"
-                >
-                  <div
-                    className="absolute inset-3 rounded-lg border border-primary/20 pointer-events-none"
-                  />
-                  <Icon
-                    className="text-primary"
-                    style={{ width: 56, height: 56, padding: 0, background: "transparent" }}
-                  />
-                  <div className="mt-6 font-serif text-3xl text-primary-deep">{year}</div>
-                  <div className="mt-3 text-xs uppercase tracking-[0.25em] text-muted-foreground">
-                    Документ № {id}
+              <figure key={id} className="nutrition-flip-card max-w-none" tabIndex={0}>
+                <div className="nutrition-flip-card-inner">
+                  <div className="nutrition-flip-card-front items-center text-center">
+                    <Icon
+                      className="text-primary"
+                      style={{ width: 56, height: 56, padding: 0, background: "transparent" }}
+                    />
+                    <div className="font-serif text-3xl text-primary-deep">{year}</div>
+                    <div className="text-xs uppercase tracking-[0.22em] text-muted-foreground">
+                      Документ № {id}
+                    </div>
+                    <p className="nutrition-flip-card-title font-serif text-[1.1rem]">{title}</p>
+                  </div>
+                  <div className="nutrition-flip-card-back items-start text-left">
+                    <p className="nutrition-flip-card-title font-serif text-[1.1rem]">{title}</p>
+                    <p className="nutrition-flip-card-text">{org}</p>
+                    <p className="text-xs uppercase tracking-[0.2em] text-white/75">
+                      Квалификация подтверждена
+                    </p>
                   </div>
                 </div>
-                <figcaption className="mt-5">
-                  <div className="font-serif text-lg leading-tight">{title}</div>
-                  <div className="mt-1.5 text-sm text-muted-foreground">{org}</div>
-                </figcaption>
               </figure>
             ))}
           </div>

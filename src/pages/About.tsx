@@ -110,25 +110,44 @@ const About = () => {
                       icon: Dna,
                       title: "Генетика бросила мне вызов",
                       text: "Моя собственная история здоровья научила меня искать корни проблем, а не бороться с симптомами. Я знаю, каково это — искать ответы там, где их, кажется, нет.",
+                      backTitle: "Что это даёт в работе",
+                      backText:
+                        "Глубокий разбор причин и бережный план изменений без давления и крайностей.",
                     },
                     {
                       icon: BookOpen,
                       title: "Жизнь как учебник",
                       text: "Через личные трудности, эксперименты и ошибки я поняла: питание — это не просто калории, а ключ к балансу тела и духа.",
+                      backTitle: "Что это даёт в работе",
+                      backText:
+                        "Практичные рекомендации, которые реально встроить в вашу повседневность.",
                     },
                     {
                       icon: GraduationCap,
                       title: "Образование и аналитика",
                       text: "Дипломы (МАН Нутрициолог 2022, физмат ЕГПУ 2003 и множество курсов) дали базу, но именно умение анализировать сложные кейсы помогает находить решения там, где другие опускают руки.",
+                      backTitle: "Что это даёт в работе",
+                      backText:
+                        "Структурный подход к сложным ситуациям и ясные шаги, понятные клиенту.",
                     },
-                  ].map(({ icon: Icon, title, text }) => (
-                    <div key={title} className="card-soft flex gap-4">
-                      <div className="shrink-0">
-                        <Icon className="accent-icon" />
-                      </div>
-                      <div>
-                        <h4 className="font-medium text-base">{title}</h4>
-                        <p className="mt-1.5 text-muted-foreground leading-relaxed text-[15px]">{text}</p>
+                  ].map(({ icon: Icon, title, text, backTitle, backText }) => (
+                    <div key={title} className="nutrition-flip-card max-w-none" tabIndex={0}>
+                      <div className="nutrition-flip-card-inner">
+                        <div className="nutrition-flip-card-front items-start text-left">
+                          <div className="flex gap-4">
+                            <div className="shrink-0">
+                              <Icon className="accent-icon" />
+                            </div>
+                            <div>
+                              <h4 className="nutrition-flip-card-title text-[1.2rem] font-medium">{title}</h4>
+                              <p className="nutrition-flip-card-text mt-1.5">{text}</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="nutrition-flip-card-back items-start text-left">
+                          <p className="nutrition-flip-card-title text-[1.2rem]">{backTitle}</p>
+                          <p className="nutrition-flip-card-text">{backText}</p>
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -138,35 +157,53 @@ const About = () => {
           </div>
 
           <div className="mt-14 grid gap-6 lg:grid-cols-2">
-            <div className="rounded-3xl border border-border bg-secondary/40 p-8 md:p-10">
-              <div className="eyebrow mb-4">Моя миссия</div>
-              <p className="text-foreground/90 leading-relaxed">
-                Превращать ваши «не могу», «не получается» и «почему я?» в чёткие алгоритмы действий.
-                Я не верю в шаблоны — только в персонализированные стратегии, основанные на науке,
-                ваших особенностях и здравом смысле.
-              </p>
+            <div className="nutrition-flip-card max-w-none" tabIndex={0}>
+              <div className="nutrition-flip-card-inner">
+                <div className="nutrition-flip-card-front items-start text-left">
+                  <div className="eyebrow mb-2">Моя миссия</div>
+                  <p className="nutrition-flip-card-text">
+                    Превращать ваши «не могу», «не получается» и «почему я?» в чёткие алгоритмы
+                    действий. Я не верю в шаблоны — только в персонализированные стратегии,
+                    основанные на науке, ваших особенностях и здравом смысле.
+                  </p>
+                </div>
+                <div className="nutrition-flip-card-back items-start text-left">
+                  <p className="nutrition-flip-card-title">Фокус сопровождения</p>
+                  <p className="nutrition-flip-card-text">
+                    Спокойный путь к устойчивым изменениям: меньше хаоса, больше ясности и опоры в
+                    ежедневной рутине.
+                  </p>
+                </div>
+              </div>
             </div>
 
-            <div className="rounded-3xl border border-border bg-card p-8 md:p-10">
-              <div className="eyebrow mb-4">Если вы</div>
-              <ul className="space-y-3 text-muted-foreground leading-relaxed">
-                <li className="flex gap-3">
-                  <span className="icon-dot" aria-hidden="true" />
-                  <span>устали от диет-качелей и готовы к системному подходу,</span>
-                </li>
-                <li className="flex gap-3">
-                  <span className="icon-dot" aria-hidden="true" />
-                  <span>имеете диагнозы, которые мешают жить,</span>
-                </li>
-                <li className="flex gap-3">
-                  <span className="icon-dot" aria-hidden="true" />
-                  <span>хотите понять, как еда влияет на вашу энергию, гормоны или ДНК,</span>
-                </li>
-                <li className="flex gap-3 text-foreground/90">
-                  <span className="icon-dot" aria-hidden="true" />
-                  <span>— давайте знакомиться ближе.</span>
-                </li>
-              </ul>
+            <div className="nutrition-flip-card max-w-none" tabIndex={0}>
+              <div className="nutrition-flip-card-inner">
+                <div className="nutrition-flip-card-front items-start text-left">
+                  <div className="eyebrow mb-2">Если вы</div>
+                  <ul className="space-y-3 text-muted-foreground leading-relaxed">
+                    <li className="flex gap-3">
+                      <span className="icon-dot" aria-hidden="true" />
+                      <span>устали от диет-качелей и готовы к системному подходу,</span>
+                    </li>
+                    <li className="flex gap-3">
+                      <span className="icon-dot" aria-hidden="true" />
+                      <span>имеете диагнозы, которые мешают жить,</span>
+                    </li>
+                    <li className="flex gap-3">
+                      <span className="icon-dot" aria-hidden="true" />
+                      <span>хотите понять, как еда влияет на вашу энергию, гормоны или ДНК,</span>
+                    </li>
+                  </ul>
+                </div>
+                <div className="nutrition-flip-card-back items-start text-left">
+                  <p className="nutrition-flip-card-title">В результате</p>
+                  <p className="nutrition-flip-card-text">
+                    Вы получите понятную стратегию питания и режима, которую можно поддерживать без
+                    перегруза и жёстких ограничений.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
 

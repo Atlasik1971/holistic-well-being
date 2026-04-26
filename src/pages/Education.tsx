@@ -1,3 +1,4 @@
+import { useState } from "react";
 import PageHero from "@/components/layout/PageHero";
 import Section from "@/components/layout/Section";
 import Seo from "@/components/seo/Seo";
@@ -49,6 +50,8 @@ const documents = [
 ];
 
 const Education = () => {
+  const [activeCardId, setActiveCardId] = useState<number | null>(null);
+
   return (
     <>
       <Seo
@@ -65,7 +68,13 @@ const Education = () => {
         <div className="container-wide">
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {documents.map(({ id, title, org, year, icon: Icon }) => (
-              <figure key={id} className="nutrition-flip-card max-w-none" tabIndex={0}>
+              <figure
+                key={id}
+                className={`nutrition-flip-card max-w-none ${activeCardId === id ? "is-flipped" : ""}`}
+                tabIndex={0}
+                onMouseEnter={() => setActiveCardId(id)}
+                onMouseLeave={() => setActiveCardId((prev) => (prev === id ? null : prev))}
+              >
                 <div className="nutrition-flip-card-inner">
                   <div className="nutrition-flip-card-front items-center text-center">
                     <Icon

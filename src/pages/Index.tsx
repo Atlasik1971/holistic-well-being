@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Section from "@/components/layout/Section";
@@ -134,6 +135,7 @@ const outcomes = [
 
 const Index = () => {
   const heroVideoSrc = `${import.meta.env.BASE_URL}VID_20260116_191915_153.mp4`;
+  const [activeCardId, setActiveCardId] = useState<string | null>(null);
 
   return (
     <>
@@ -250,7 +252,13 @@ const Index = () => {
           </div>
           <div className="mt-10 grid gap-5 md:grid-cols-2">
             {formats.map((f) => (
-              <div key={f.title} className="nutrition-flip-card max-w-none" tabIndex={0}>
+              <div
+                key={f.title}
+                className={`nutrition-flip-card max-w-none ${activeCardId === `format-${f.title}` ? "is-flipped" : ""}`}
+                tabIndex={0}
+                onMouseEnter={() => setActiveCardId(`format-${f.title}`)}
+                onMouseLeave={() => setActiveCardId((prev) => (prev === `format-${f.title}` ? null : prev))}
+              >
                 <div className="nutrition-flip-card-inner">
                   <div className="nutrition-flip-card-front items-start text-left">
                     <p className="nutrition-flip-card-title font-serif">{f.title}</p>
@@ -288,7 +296,13 @@ const Index = () => {
           </div>
           <ol className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {steps.map((s) => (
-              <li key={s.n} className="nutrition-flip-card max-w-none" tabIndex={0}>
+              <li
+                key={s.n}
+                className={`nutrition-flip-card max-w-none ${activeCardId === `step-${s.n}` ? "is-flipped" : ""}`}
+                tabIndex={0}
+                onMouseEnter={() => setActiveCardId(`step-${s.n}`)}
+                onMouseLeave={() => setActiveCardId((prev) => (prev === `step-${s.n}` ? null : prev))}
+              >
                 <div className="nutrition-flip-card-inner">
                   <div className="nutrition-flip-card-front items-start text-left">
                     <div className="flex items-start gap-4">

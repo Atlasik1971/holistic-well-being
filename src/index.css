@@ -275,7 +275,7 @@
     transform-style: preserve-3d;
   }
 
-  .nutrition-flip-card:hover .nutrition-flip-card-inner,
+  .nutrition-flip-card.is-flipped .nutrition-flip-card-inner,
   .nutrition-flip-card:focus-within .nutrition-flip-card-inner {
     transform: rotateY(180deg);
   }

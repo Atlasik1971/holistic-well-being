@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import PageHero from "@/components/layout/PageHero";
@@ -31,6 +32,8 @@ const principles = [
 ];
 
 const About = () => {
+  const [activeCardId, setActiveCardId] = useState<string | null>(null);
+
   return (
     <>
       <Seo
@@ -131,7 +134,13 @@ const About = () => {
                         "Структурный подход к сложным ситуациям и ясные шаги, понятные клиенту.",
                     },
                   ].map(({ icon: Icon, title, text, backTitle, backText }) => (
-                    <div key={title} className="nutrition-flip-card max-w-none" tabIndex={0}>
+                    <div
+                      key={title}
+                      className={`nutrition-flip-card max-w-none ${activeCardId === `trust-${title}` ? "is-flipped" : ""}`}
+                      tabIndex={0}
+                      onMouseEnter={() => setActiveCardId(`trust-${title}`)}
+                      onMouseLeave={() => setActiveCardId((prev) => (prev === `trust-${title}` ? null : prev))}
+                    >
                       <div className="nutrition-flip-card-inner">
                         <div className="nutrition-flip-card-front items-start text-left">
                           <div className="flex gap-4">
@@ -157,7 +166,12 @@ const About = () => {
           </div>
 
           <div className="mt-14 grid gap-6 lg:grid-cols-2">
-            <div className="nutrition-flip-card max-w-none" tabIndex={0}>
+            <div
+              className={`nutrition-flip-card max-w-none ${activeCardId === "mission-card" ? "is-flipped" : ""}`}
+              tabIndex={0}
+              onMouseEnter={() => setActiveCardId("mission-card")}
+              onMouseLeave={() => setActiveCardId((prev) => (prev === "mission-card" ? null : prev))}
+            >
               <div className="nutrition-flip-card-inner">
                 <div className="nutrition-flip-card-front items-start text-left">
                   <div className="eyebrow mb-2">Моя миссия</div>
@@ -177,7 +191,12 @@ const About = () => {
               </div>
             </div>
 
-            <div className="nutrition-flip-card max-w-none" tabIndex={0}>
+            <div
+              className={`nutrition-flip-card max-w-none ${activeCardId === "if-you-card" ? "is-flipped" : ""}`}
+              tabIndex={0}
+              onMouseEnter={() => setActiveCardId("if-you-card")}
+              onMouseLeave={() => setActiveCardId((prev) => (prev === "if-you-card" ? null : prev))}
+            >
               <div className="nutrition-flip-card-inner">
                 <div className="nutrition-flip-card-front items-start text-left">
                   <div className="eyebrow mb-2">Если вы</div>

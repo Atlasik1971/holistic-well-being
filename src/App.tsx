@@ -26,13 +26,16 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
+/** С base из Vite (например /holistic-well-being/) иначе GitHub Pages отдаёт 404-роуты вне корня. */
+const routerBasename = import.meta.env.BASE_URL.replace(/\/$/, "") || "/";
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider>
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
+        <BrowserRouter basename={routerBasename}>
           <AuthProvider>
             <Routes>
               <Route element={<Layout />}>

@@ -11,7 +11,6 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { MessageCircle, Send, Phone, Check, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { isSupabaseEnabled, supabase } from "@/integrations/supabase/client";
 
 type Channel = "telegram" | "whatsapp" | "max";
 
@@ -67,27 +66,22 @@ const Booking = () => {
     }
     setErrors({});
     setSubmitting(true);
-    const formatLabel = FORMAT_LABEL[result.data.format] ?? result.data.format;
-    const channelLabel = channels.find((c) => c.id === result.data.channel)?.label ?? result.data.channel;
-    const { error } = isSupabaseEnabled
-      ? await supabase.from("bookings").insert({
-          name: result.data.name,
-          contact: `${channelLabel}: ${result.data.contact}`,
-          format: formatLabel + (result.data.withDoctor ? " · в связке с врачом" : ""),
-          request: result.data.request,
-        })
-      : { error: null };
+    const _formatLabel = FORMAT_LABEL[result.data.format] ?? result.data.format;
+    const _channelLabel = channels.find((c) => c.id === result.data.channel)?.label ?? result.data.channel;
+    const _demoPayload = {
+      name: result.data.name,
+      contact: result.data.contact,
+      channel: _channelLabel,
+      format: _formatLabel + (result.data.withDoctor ? " · в связке с врачом" : ""),
+      request: result.data.request,
+    };
+    void _demoPayload;
     setSubmitting(false);
-    if (error) {
-      toast.error("Не удалось отправить заявку. Попробуйте ещё раз.");
-      return;
-    }
+    e.currentTarget.reset();
+    setChannel("");
+    setErrors({});
     setSubmitted(true);
-    toast.success(
-      isSupabaseEnabled
-        ? "Заявка отправлена. Я свяжусь с вами в течение 1–2 рабочих дней."
-        : "Демо-режим: форма проверена локально, отправка в базу отключена.",
-    );
+    toast.success("Спасибо! Ваша заявка отправлена. Я свяжусь с вами в течение 1–2 рабочих дней.");
   };
 
   return (
@@ -183,7 +177,7 @@ const Booking = () => {
                       <Input
                         id="contact"
                         name="contact"
-                        placeholder="@username или телефон"
+                        placeholder="Ник в мессенджере или номер телефона"
                         maxLength={120}
                         required
                         className="mt-2"

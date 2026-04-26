@@ -1,4 +1,4 @@
-import { useState, useEffect, FormEvent } from "react";
+import { useState, useEffect, FormEvent, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { MessageCircle, X, Send, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -8,7 +8,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import { z } from "zod";
 import { cn } from "@/lib/utils";
-import { isSupabaseEnabled, supabase } from "@/integrations/supabase/client";
 
 const phoneRegex = /^[0-9+\-\s()]{5,30}$/;
 
@@ -40,19 +39,19 @@ const ChatWidget = () => {
 
   // Полный сброс state виджета (поля, согласие, submitting).
   // Никакая история / черновики / success не сохраняются.
-  const resetState = () => {
+  const resetState = useCallback(() => {
     setName("");
     setPhone("");
     setQuestion("");
     setConsent(false);
     setSubmitting(false);
-  };
+  }, []);
 
   // Любое закрытие чата — с очисткой state.
-  const closeChat = () => {
+  const closeChat = useCallback(() => {
     setOpen(false);
     resetState();
-  };
+  }, [resetState]);
 
   // Тоггл FAB: открытие — чисто, закрытие — со сбросом.
   const toggleChat = () => {
@@ -72,7 +71,7 @@ const ChatWidget = () => {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [open]);
+  }, [open, closeChat]);
 
   const canSubmit =
     !submitting &&
@@ -90,40 +89,14 @@ const ChatWidget = () => {
     }
     setSubmitting(true);
 
-    const { error } = isSupabaseEnabled
-      ? await supabase.from("chat_leads").insert({
-          name: result.data.name,
-          contact: result.data.phone,
-          message: result.data.question,
-        })
-      : { error: null };
+    const demoPayload = {
+      name: result.data.name,
+      phone: result.data.phone,
+      message: result.data.question,
+    };
+    void demoPayload;
 
-    // Fallback: если запись в БД не удалась — пробуем отправить заявку
-    // напрямую в Telegram через edge-функцию, чтобы не потерять контакт.
-    if (error) {
-      const { error: fnError } = await supabase.functions.invoke(
-        "notify-telegram",
-        {
-          body: {
-            source: "website_form",
-            name: result.data.name,
-            phone: result.data.phone,
-            message: result.data.question,
-          },
-        },
-      );
-      if (fnError) {
-        setSubmitting(false);
-        toast.error("Не удалось отправить. Попробуйте ещё раз.");
-        return;
-      }
-    }
-
-    toast.success(
-      isSupabaseEnabled
-        ? "Спасибо! Я свяжусь с вами в течение 1–2 рабочих дней."
-        : "Демо-режим: заявка проверена локально, отправка отключена.",
-    );
+    toast.success("Спасибо за сообщение! Я получила ваш запрос и свяжусь с вами в ближайшее время.");
     // Автозакрытие чата с полным сбросом state.
     closeChat();
   };

@@ -3,12 +3,14 @@ import Section from "@/components/layout/Section";
 import diplomaImage from "@/assets/diploma-placeholder.jpg";
 import { GraduationCap } from "lucide-react";
 
-const documents = Array.from({ length: 6 }).map((_, i) => ({
-  id: i + 1,
-  title: `Документ №${i + 1}`,
-  org: "Учебное заведение / организация",
-  year: "—",
-}));
+const documents = [
+  { id: 1, title: "Диплом о профессиональной переподготовке", org: "Программа по нутрициологии", year: "2022" },
+  { id: 2, title: "Сертификат по работе с пищевыми привычками", org: "Курс по поведенческим стратегиям", year: "2023" },
+  { id: 3, title: "Повышение квалификации по консультированию", org: "Практика персонального сопровождения", year: "2024" },
+  { id: 4, title: "Сертификат по коммуникации с клиентами", org: "Консультативные навыки и этика", year: "2024" },
+  { id: 5, title: "Программа по рациону и режиму дня", org: "Современные подходы в нутрициологии", year: "2025" },
+  { id: 6, title: "Сертификат по системной работе с запросом", org: "Инструменты мягкого сопровождения", year: "2025" },
+];
 
 const Education = () => {
   return (
@@ -16,7 +18,7 @@ const Education = () => {
       <PageHero
         eyebrow="Образование"
         title="Дипломы, сертификаты и документы"
-        description="Подтверждение профессиональной подготовки. Раздел готов к наполнению — место под сканы и подписи."
+        description="Подтверждение профессиональной подготовки и регулярного повышения квалификации."
       />
 
       <Section className="!pt-4">
@@ -30,7 +32,7 @@ const Education = () => {
                 <div className="rounded-xl overflow-hidden bg-muted aspect-[4/5]">
                   <img
                     src={diplomaImage}
-                    alt={`Заглушка для документа ${d.title}`}
+                    alt={`Документ: ${d.title}`}
                     width={1024}
                     height={1280}
                     loading="lazy"

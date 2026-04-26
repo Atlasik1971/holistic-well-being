@@ -1,35 +1,11 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import PageHero from "@/components/layout/PageHero";
 import Section from "@/components/layout/Section";
-import { Check, Sparkles, ChefHat, Loader2 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-
-type Service = {
-  id: string;
-  title: string;
-  description: string | null;
-  duration: string | null;
-  price: string | null;
-};
+import { Check, Sparkles, ChefHat } from "lucide-react";
+import { services } from "@/data/services";
 
 const Services = () => {
-  const [services, setServices] = useState<Service[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    supabase
-      .from("services")
-      .select("id, title, description, duration, price")
-      .eq("is_published", true)
-      .order("sort_order")
-      .then(({ data }) => {
-        setServices((data ?? []) as Service[]);
-        setLoading(false);
-      });
-  }, []);
-
   return (
     <>
       <PageHero
@@ -40,60 +16,42 @@ const Services = () => {
 
       <Section className="!pt-4">
         <div className="container-wide">
-          {loading ? (
-            <div className="py-16 flex justify-center">
-              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-            </div>
-          ) : services.length === 0 ? (
-            <div className="card-soft text-center py-12 text-muted-foreground">
-              Услуги скоро появятся.
-            </div>
-          ) : (
-            <div className="grid gap-6 lg:grid-cols-2">
-              {services.map((s, idx) => (
-                <div
-                  key={s.id}
-                  className={`card-soft flex flex-col ${
-                    idx % 2 === 1 ? "bg-primary-soft/40 border-primary/20" : ""
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <Sparkles className="h-5 w-5 text-primary" />
-                    <span className="eyebrow">
-                      Формат {String(idx + 1).padStart(2, "0")}
-                    </span>
-                  </div>
-                  <h2 className="mt-4 font-serif text-3xl">{s.title}</h2>
-                  {s.description && (
-                    <p className="mt-3 text-muted-foreground leading-relaxed whitespace-pre-line">
-                      {s.description}
-                    </p>
-                  )}
-                  {(s.duration || s.price) && (
-                    <ul className="mt-7 space-y-3">
-                      {s.duration && (
-                        <li className="flex items-start gap-3 text-[15px] text-foreground/90">
-                          <Check className="mt-1 h-4 w-4 shrink-0 text-primary" />
-                          <span>Длительность: {s.duration}</span>
-                        </li>
-                      )}
-                      {s.price && (
-                        <li className="flex items-start gap-3 text-[15px] text-foreground/90">
-                          <Check className="mt-1 h-4 w-4 shrink-0 text-primary" />
-                          <span>Стоимость: {s.price}</span>
-                        </li>
-                      )}
-                    </ul>
-                  )}
-                  <div className="mt-8 pt-6 border-t border-border/60">
-                    <Button asChild variant="hero" size="lg" className="w-full sm:w-auto">
-                      <Link to="/booking">Записаться</Link>
-                    </Button>
-                  </div>
+          <div className="grid gap-6 lg:grid-cols-2">
+            {services.map((s, idx) => (
+              <div
+                key={s.id}
+                className={`card-soft flex flex-col ${
+                  idx % 2 === 1 ? "bg-primary-soft/40 border-primary/20" : ""
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <Sparkles className="h-5 w-5 text-primary" />
+                  <span className="eyebrow">
+                    Формат {String(idx + 1).padStart(2, "0")}
+                  </span>
                 </div>
-              ))}
-            </div>
-          )}
+                <h2 className="mt-4 font-serif text-3xl">{s.title}</h2>
+                <p className="mt-3 text-muted-foreground leading-relaxed whitespace-pre-line">
+                  {s.description}
+                </p>
+                <ul className="mt-7 space-y-3">
+                  <li className="flex items-start gap-3 text-[15px] text-foreground/90">
+                    <Check className="mt-1 h-4 w-4 shrink-0 text-primary" />
+                    <span>Длительность: {s.duration}</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-[15px] text-foreground/90">
+                    <Check className="mt-1 h-4 w-4 shrink-0 text-primary" />
+                    <span>Стоимость: {s.price ?? "Стоимость уточняется индивидуально"}</span>
+                  </li>
+                </ul>
+                <div className="mt-8 pt-6 border-t border-border/60">
+                  <Button asChild variant="hero" size="lg" className="w-full sm:w-auto">
+                    <Link to="/booking">Записаться</Link>
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </Section>
 

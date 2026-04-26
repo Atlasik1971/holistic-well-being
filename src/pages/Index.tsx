@@ -32,6 +32,21 @@ const steps = [
   { n: "04", title: "Встреча", text: "Проводим консультацию. Вы получаете рекомендации в письменном виде." },
 ];
 
+const whoFits = [
+  "Если питание стало хаотичным",
+  "Если хочется больше энергии",
+  "Если не подходят жёсткие диеты",
+  "Если нужна структура",
+];
+
+const outcomes = [
+  "Разбор текущего рациона и режима",
+  "Рекомендации по питанию и привычкам",
+  "Первые шаги для самостоятельной работы",
+  "Понимание подходящего формата работы",
+  "Письменные рекомендации после встречи",
+];
+
 const Index = () => {
   const [videoFailed, setVideoFailed] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
@@ -187,6 +202,43 @@ const Index = () => {
               </li>
             ))}
           </ol>
+        </div>
+      </Section>
+
+      <Section>
+        <div className="container-wide">
+          <div className="max-w-3xl">
+            <div className="eyebrow mb-5">Кому подойдёт консультация</div>
+            <p className="text-muted-foreground leading-relaxed">
+              Консультация подойдёт тем, кто хочет наладить питание без жёстких диет, разобраться в
+              привычках, режиме дня и самочувствии, а также получить понятный план действий, который
+              можно встроить в обычную жизнь.
+            </p>
+          </div>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {whoFits.map((item) => (
+              <div key={item} className="card-soft">
+                <h3 className="text-base">{item}</h3>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Section>
+
+      <Section tone="muted">
+        <div className="container-wide">
+          <div className="max-w-2xl">
+            <div className="eyebrow mb-5">Результат консультации</div>
+            <h2>Что вы получите после консультации</h2>
+          </div>
+          <ul className="mt-8 grid gap-3 sm:grid-cols-2">
+            {outcomes.map((item) => (
+              <li key={item} className="card-soft flex gap-3 items-start text-[15px] text-foreground/90">
+                <Check className="mt-0.5 h-4 w-4 text-primary shrink-0" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       </Section>
 

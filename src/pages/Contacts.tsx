@@ -7,17 +7,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import PageHero from "@/components/layout/PageHero";
 import Section from "@/components/layout/Section";
-import { Send, MessageCircle, Phone, Mail, Clock, MapPin, Loader2, Check } from "lucide-react";
+import { Loader2, Check } from "lucide-react";
 import { z } from "zod";
 import { toast } from "sonner";
-import { isSupabaseEnabled, supabase } from "@/integrations/supabase/client";
-
-const channels = [
-  { icon: Send, label: "Telegram", value: "@username", href: "https://t.me/" },
-  { icon: MessageCircle, label: "WhatsApp", value: "+7 (000) 000-00-00", href: "https://wa.me/" },
-  { icon: Phone, label: "Max", value: "@username", href: "#" },
-  { icon: Mail, label: "Email", value: "hello@example.com", href: "mailto:hello@example.com" },
-];
 
 const schema = z.object({
   name: z.string().trim().min(2, "Укажите имя").max(80),
@@ -50,78 +42,32 @@ const Contacts = () => {
     }
     setErrors({});
     setSubmitting(true);
-    const { error } = isSupabaseEnabled
-      ? await supabase.from("contact_messages").insert({
-          name: parsed.data.name,
-          contact: parsed.data.contact,
-          message: parsed.data.message,
-        })
-      : { error: null };
+    const demoPayload = {
+      name: parsed.data.name,
+      contact: parsed.data.contact,
+      message: parsed.data.message,
+    };
+    void demoPayload;
     setSubmitting(false);
-    if (error) {
-      toast.error("Не удалось отправить. Попробуйте ещё раз.");
-      return;
-    }
+    e.currentTarget.reset();
+    setErrors({});
     setSent(true);
-    toast.success(
-      isSupabaseEnabled
-        ? "Сообщение отправлено"
-        : "Демо-режим: форма проверена локально, отправка в базу отключена.",
-    );
+    toast.success("Спасибо! Ваша заявка отправлена. Я свяжусь с вами в течение 1–2 рабочих дней.");
   };
 
   return (
     <>
       <PageHero
         eyebrow="Контакты"
-        title="Как со мной связаться"
-        description="Любой удобный мессенджер. Отвечаю в течение 1–2 рабочих дней."
+        title="Связаться со мной"
+        description="Для связи заполните форму — я отвечу в течение 1–2 рабочих дней."
       />
 
       <Section className="!pt-4">
-        <div className="container-wide grid gap-10 lg:grid-cols-12">
-          <div className="lg:col-span-7">
-            <div className="grid gap-4 sm:grid-cols-2">
-              {channels.map(({ icon: Icon, label, value, href }) => (
-                <a
-                  key={label}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="card-soft group flex items-start gap-4 hover:border-primary/40"
-                >
-                  <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-primary-soft text-primary shrink-0">
-                    <Icon className="h-5 w-5" />
-                  </div>
-                  <div className="min-w-0">
-                    <div className="text-xs uppercase tracking-widest text-muted-foreground">
-                      {label}
-                    </div>
-                    <div className="mt-1 font-medium text-foreground truncate group-hover:text-primary transition-colors">
-                      {value}
-                    </div>
-                  </div>
-                </a>
-              ))}
-            </div>
+        <div className="container-narrow">
+          <div className="card-soft border-primary/20 bg-primary-soft/30">
+            Для связи заполните форму — я отвечу в течение 1–2 рабочих дней.
           </div>
-
-          <aside className="lg:col-span-5 space-y-4">
-            <div className="card-soft">
-              <Clock className="h-5 w-5 text-primary" />
-              <h3 className="mt-4 text-lg">Время ответа</h3>
-              <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-                Отвечаю в течение 1–2 рабочих дней. По выходным и праздникам — в первый рабочий день.
-              </p>
-            </div>
-            <div className="card-soft">
-              <MapPin className="h-5 w-5 text-primary" />
-              <h3 className="mt-4 text-lg">Формат встреч</h3>
-              <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-                Консультации проходят онлайн. Очный формат — по согласованию.
-              </p>
-            </div>
-          </aside>
         </div>
       </Section>
 

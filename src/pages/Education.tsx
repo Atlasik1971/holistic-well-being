@@ -41,7 +41,7 @@ const Education = () => {
                 </div>
                 <figcaption className="mt-4 px-1">
                   <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground">
-                    <GraduationCap className="h-3.5 w-3.5" />
+                    <GraduationCap className="accent-icon" />
                     {d.year}
                   </div>
                   <div className="mt-1.5 font-serif text-lg">{d.title}</div>

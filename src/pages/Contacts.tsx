@@ -77,7 +77,7 @@ const Contacts = () => {
           {sent ? (
             <div className="card-soft text-center py-12">
               <div className="mx-auto inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary-soft text-primary">
-                <Check className="h-5 w-5" />
+                <Check className="accent-icon" />
               </div>
               <h3 className="mt-5 font-serif text-xl">Сообщение получено</h3>
               <p className="mt-2 text-sm text-muted-foreground">

@@ -108,9 +108,7 @@ const About = () => {
                   ].map(({ icon: Icon, title, text }) => (
                     <div key={title} className="card-soft flex gap-4">
                       <div className="shrink-0">
-                        <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-                          <Icon className="h-5 w-5 text-primary" />
-                        </div>
+                        <Icon className="accent-icon" />
                       </div>
                       <div>
                         <h4 className="font-medium text-base">{title}</h4>
@@ -137,19 +135,19 @@ const About = () => {
               <div className="eyebrow mb-4">Если вы</div>
               <ul className="space-y-3 text-muted-foreground leading-relaxed">
                 <li className="flex gap-3">
-                  <span className="mt-2 h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
+                  <span className="icon-dot" aria-hidden="true" />
                   <span>устали от диет-качелей и готовы к системному подходу,</span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="mt-2 h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
+                  <span className="icon-dot" aria-hidden="true" />
                   <span>имеете диагнозы, которые мешают жить,</span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="mt-2 h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
+                  <span className="icon-dot" aria-hidden="true" />
                   <span>хотите понять, как еда влияет на вашу энергию, гормоны или ДНК,</span>
                 </li>
                 <li className="flex gap-3 text-foreground/90">
-                  <span className="mt-2 h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
+                  <span className="icon-dot" aria-hidden="true" />
                   <span>— давайте знакомиться ближе.</span>
                 </li>
               </ul>
@@ -157,7 +155,7 @@ const About = () => {
           </div>
 
           <div className="mt-12 text-center max-w-2xl mx-auto">
-            <Sparkles className="h-6 w-6 text-primary mx-auto mb-4" />
+            <Sparkles className="accent-icon mx-auto mb-4" />
             <p className="font-serif text-xl md:text-2xl leading-relaxed text-foreground">
               Ваше здоровье — не головоломка. Это мозаика, и я знаю, как собрать её правильно.
             </p>
@@ -182,9 +180,13 @@ const About = () => {
           <div className="mt-10 grid gap-5 sm:grid-cols-2">
             {principles.map(({ icon: Icon, title, text }) => (
               <div key={title} className="card-soft">
-                <Icon className="h-6 w-6 text-primary" />
-                <h3 className="mt-4 text-lg">{title}</h3>
-                <p className="mt-2 text-muted-foreground leading-relaxed text-[15px]">{text}</p>
+                <div className="flex items-start gap-4">
+                  <Icon className="accent-icon" />
+                  <div>
+                    <h3 className="text-lg">{title}</h3>
+                    <p className="mt-2 text-muted-foreground leading-relaxed text-[15px]">{text}</p>
+                  </div>
+                </div>
               </div>
             ))}
           </div>

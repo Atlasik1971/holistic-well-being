@@ -134,8 +134,8 @@ const ChatWidget = () => {
           {/* Header */}
           <div className="flex items-center justify-between gap-3 px-5 py-4 border-b border-border bg-primary-soft/40">
             <div className="flex items-center gap-3 min-w-0">
-              <div className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground shrink-0">
-                <MessageCircle className="h-4 w-4" />
+              <div className="inline-flex items-center justify-center shrink-0">
+                <MessageCircle className="accent-icon" />
               </div>
               <div className="min-w-0">
                 <div className="font-serif text-base leading-tight">Чат-помощник</div>

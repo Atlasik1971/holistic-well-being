@@ -91,15 +91,15 @@ const Index = () => {
               </div>
               <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-muted-foreground">
                 <div className="flex items-center gap-2">
-                  <Sparkles className="h-4 w-4 text-primary" />
+                  <Sparkles className="accent-icon" />
                   Персональный подход
                 </div>
                 <div className="flex items-center gap-2">
-                  <HeartHandshake className="h-4 w-4 text-primary" />
+                  <HeartHandshake className="accent-icon" />
                   Бережное сопровождение
                 </div>
                 <div className="flex items-center gap-2">
-                  <Leaf className="h-4 w-4 text-primary" />
+                  <Leaf className="accent-icon" />
                   Реалистичный результат
                 </div>
               </div>
@@ -162,7 +162,7 @@ const Index = () => {
                   key={t}
                   className="card-soft flex gap-3 items-start text-[15px] text-foreground/90"
                 >
-                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                  <span className="icon-dot" aria-hidden="true" />
                   <span>{t}</span>
                 </li>
               ))}
@@ -211,8 +211,12 @@ const Index = () => {
           <ol className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {steps.map((s) => (
               <li key={s.n} className="card-soft">
-                <div className="font-serif text-2xl text-primary">{s.n}</div>
-                <h3 className="mt-3 text-lg">{s.title}</h3>
+                <div className="flex items-start gap-4">
+                  <span className="accent-icon inline-flex items-center justify-center text-sm font-semibold">
+                    {s.n}
+                  </span>
+                  <h3 className="text-lg">{s.title}</h3>
+                </div>
                 <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{s.text}</p>
               </li>
             ))}
@@ -233,7 +237,10 @@ const Index = () => {
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {whoFits.map((item) => (
               <div key={item} className="card-soft">
-                <h3 className="text-base">{item}</h3>
+                <div className="flex items-start gap-4">
+                  <span className="icon-dot" aria-hidden="true" />
+                  <h3 className="text-base">{item}</h3>
+                </div>
               </div>
             ))}
           </div>
@@ -249,7 +256,7 @@ const Index = () => {
           <ul className="mt-8 grid gap-3 sm:grid-cols-2">
             {outcomes.map((item) => (
               <li key={item} className="card-soft flex gap-3 items-start text-[15px] text-foreground/90">
-                <Check className="mt-0.5 h-4 w-4 text-primary shrink-0" />
+                <Check className="accent-icon" />
                 <span>{item}</span>
               </li>
             ))}
@@ -285,7 +292,7 @@ const Index = () => {
           <div className="card-soft border-primary/20 bg-primary-soft/30">
             <div className="flex flex-col md:flex-row gap-6 md:items-start">
               <div className="shrink-0">
-                <ShieldCheck className="h-8 w-8 text-primary" />
+                <ShieldCheck className="accent-icon" />
               </div>
               <div>
                 <h3 className="font-serif text-xl">Ответственный подход</h3>
@@ -302,7 +309,7 @@ const Index = () => {
                     "Работаю как часть вашей общей заботы о здоровье",
                   ].map((x) => (
                     <li key={x} className="flex items-start gap-2 text-foreground/85">
-                      <Check className="mt-0.5 h-4 w-4 text-primary shrink-0" />
+                      <span className="icon-dot" aria-hidden="true" />
                       {x}
                     </li>
                   ))}

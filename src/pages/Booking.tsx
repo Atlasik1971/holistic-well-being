@@ -99,19 +99,19 @@ const Booking = () => {
               <div className="eyebrow mb-3">Что дальше</div>
               <ol className="space-y-3 text-sm text-foreground/85">
                 <li className="flex gap-3">
-                  <span className="font-serif text-primary">1.</span>
+                  <span className="accent-icon inline-flex items-center justify-center text-sm font-semibold">1</span>
                   Выбираете мессенджер и заполняете анкету ниже
                 </li>
                 <li className="flex gap-3">
-                  <span className="font-serif text-primary">2.</span>
+                  <span className="accent-icon inline-flex items-center justify-center text-sm font-semibold">2</span>
                   Я отвечаю в течение 1–2 рабочих дней
                 </li>
                 <li className="flex gap-3">
-                  <span className="font-serif text-primary">3.</span>
+                  <span className="accent-icon inline-flex items-center justify-center text-sm font-semibold">3</span>
                   Согласуем формат, дату и время
                 </li>
                 <li className="flex gap-3">
-                  <span className="font-serif text-primary">4.</span>
+                  <span className="accent-icon inline-flex items-center justify-center text-sm font-semibold">4</span>
                   Проводим встречу
                 </li>
               </ol>
@@ -128,7 +128,7 @@ const Booking = () => {
             {submitted ? (
               <div className="card-soft text-center py-16">
                 <div className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-full bg-primary-soft text-primary">
-                  <Check className="h-6 w-6" />
+                  <Check className="accent-icon" />
                 </div>
                 <h2 className="mt-6 font-serif text-2xl">Спасибо, заявка получена</h2>
                 <p className="mt-3 max-w-md mx-auto text-muted-foreground">
@@ -153,7 +153,7 @@ const Booking = () => {
                             : "border-border bg-background hover:border-primary/40"
                         }`}
                       >
-                        <Icon className={`h-5 w-5 ${channel === id ? "text-primary" : "text-muted-foreground"}`} />
+                        <Icon className={`accent-icon ${channel === id ? "" : "opacity-70"}`} />
                         <div className="mt-3 font-medium">{label}</div>
                         <div className="text-xs text-muted-foreground mt-0.5">{hint}</div>
                       </button>

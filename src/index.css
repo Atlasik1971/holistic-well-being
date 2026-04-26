@@ -24,6 +24,7 @@
 
     /* Бренд: приглушённый шалфейный */
     --primary: 95 14% 38%;             /* sage */
+    --sage: 95 14% 38%;
     --primary-foreground: 40 30% 97%;
     --primary-soft: 95 18% 88%;        /* очень мягкий шалфей для фоновых блоков */
     --primary-deep: 95 18% 28%;
@@ -81,6 +82,7 @@
     --popover-foreground: 40 20% 92%;
 
     --primary: 95 22% 62%;
+    --sage: 95 22% 62%;
     --primary-foreground: 210 14% 10%;
     --primary-soft: 95 14% 20%;
     --primary-deep: 95 28% 75%;
@@ -179,21 +181,23 @@
 }
 
 @layer base {
-  /* Глобальная мягкая подсветка для всех Lucide-иконок в палитре сайта */
-  svg.lucide {
-    transition: filter 0.28s ease, transform 0.28s ease, color 0.28s ease;
-    filter:
-      drop-shadow(0 0 0.35rem hsl(var(--primary) / 0.20))
-      drop-shadow(0 0 0.7rem hsl(var(--primary) / 0.14));
-    will-change: filter, transform;
+  .icon-dot {
+    width: 8px;
+    height: 8px;
+    min-width: 8px;
+    border-radius: 9999px;
+    background-color: hsl(var(--sage, 95 14% 38%));
+    box-shadow: 0 0 0 6px hsl(var(--sage, 95 14% 38%) / 0.10);
+    margin-top: 0.55rem;
   }
 
-  :where(a, button, .card-soft, [role="button"], label):hover svg.lucide,
-  :where(a, button, .card-soft, [role="button"], label):focus-visible svg.lucide {
-    filter:
-      drop-shadow(0 0 0.45rem hsl(var(--primary) / 0.35))
-      drop-shadow(0 0 1rem hsl(var(--primary) / 0.24))
-      drop-shadow(0 0 1.4rem hsl(var(--primary) / 0.15));
-    transform: translateY(-1px) scale(1.02);
+  .accent-icon {
+    color: #6f7f63;
+    background: rgba(111, 127, 99, 0.10);
+    border-radius: 9999px;
+    padding: 8px;
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
   }
 }

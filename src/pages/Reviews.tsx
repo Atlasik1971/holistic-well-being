@@ -51,7 +51,7 @@ const Reviews = () => {
           <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
             {reviews.map((r) => (
               <div key={r.id} className="card-soft">
-                <Quote className="h-5 w-5 text-primary" />
+                <Quote className="accent-icon" />
                 <p className="mt-4 text-[15px] text-foreground/85 leading-relaxed">
                   «{r.text}»
                 </p>

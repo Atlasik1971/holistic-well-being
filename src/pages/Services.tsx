@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import PageHero from "@/components/layout/PageHero";
 import Section from "@/components/layout/Section";
-import { Check, Sparkles, ChefHat } from "lucide-react";
+import { Sparkles, ChefHat } from "lucide-react";
 import { services } from "@/data/services";
 
 const Services = () => {
@@ -25,7 +25,7 @@ const Services = () => {
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <Sparkles className="h-5 w-5 text-primary" />
+                  <Sparkles className="accent-icon" />
                   <span className="eyebrow">
                     Формат {String(idx + 1).padStart(2, "0")}
                   </span>
@@ -36,11 +36,11 @@ const Services = () => {
                 </p>
                 <ul className="mt-7 space-y-3">
                   <li className="flex items-start gap-3 text-[15px] text-foreground/90">
-                    <Check className="mt-1 h-4 w-4 shrink-0 text-primary" />
+                    <span className="icon-dot" aria-hidden="true" />
                     <span>Длительность: {s.duration}</span>
                   </li>
                   <li className="flex items-start gap-3 text-[15px] text-foreground/90">
-                    <Check className="mt-1 h-4 w-4 shrink-0 text-primary" />
+                    <span className="icon-dot" aria-hidden="true" />
                     <span>Стоимость: {s.price ?? "Стоимость уточняется индивидуально"}</span>
                   </li>
                 </ul>
@@ -58,7 +58,7 @@ const Services = () => {
       <Section tone="muted">
         <div className="container-wide grid gap-8 md:grid-cols-12 items-start">
           <div className="md:col-span-1">
-            <ChefHat className="h-7 w-7 text-primary" />
+            <ChefHat className="accent-icon" />
           </div>
           <div className="md:col-span-7">
             <div className="eyebrow mb-3">Дополнительно</div>
@@ -75,8 +75,8 @@ const Services = () => {
             <div className="card-soft bg-background">
               <div className="text-sm text-muted-foreground">Включено в:</div>
               <ul className="mt-3 space-y-1.5 text-foreground/90">
-                <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary" /> Разовую консультацию</li>
-                <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary" /> Сопровождение</li>
+                <li className="flex items-start gap-4"><span className="icon-dot" aria-hidden="true" /> Разовую консультацию</li>
+                <li className="flex items-start gap-4"><span className="icon-dot" aria-hidden="true" /> Сопровождение</li>
               </ul>
             </div>
           </div>

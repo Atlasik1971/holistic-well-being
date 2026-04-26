@@ -5,6 +5,7 @@ import Section from "@/components/layout/Section";
 import { ArrowRight, Check, ShieldCheck, Sparkles, HeartHandshake, Leaf, Volume2, VolumeX } from "lucide-react";
 import heroImage from "@/assets/hero-herbs.jpg";
 import TextType from "@/components/TextType";
+import ElectricBorder from "@/components/ui/ElectricBorder";
 
 const topics = [
   "Энергия и стабильное самочувствие в течение дня",
@@ -156,14 +157,22 @@ const Index = () => {
                 рассматривается индивидуально, с учётом вашего ритма и контекста.
               </p>
             </div>
-            <ul className="md:col-span-8 grid gap-3 sm:grid-cols-2">
+            <ul className="md:col-span-8 list-none grid gap-3 sm:grid-cols-2 p-0 m-0">
               {topics.map((t) => (
-                <li
-                  key={t}
-                  className="card-soft flex gap-3 items-start text-[15px] text-foreground/90"
-                >
-                  <span className="icon-dot" aria-hidden="true" />
-                  <span>{t}</span>
+                <li key={t} className="min-w-0">
+                  <ElectricBorder
+                    color="#8acc7e"
+                    speed={0.6}
+                    chaos={0.05}
+                    thickness={2}
+                    borderRadius={16}
+                    className="h-full w-full"
+                  >
+                    <div className="card-soft border-transparent flex gap-3 items-start text-[15px] text-foreground/90 h-full">
+                      <span className="icon-dot" aria-hidden="true" />
+                      <span>{t}</span>
+                    </div>
+                  </ElectricBorder>
                 </li>
               ))}
             </ul>

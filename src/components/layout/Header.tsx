@@ -66,7 +66,12 @@ const Header = () => {
         <div className="hidden lg:flex items-center gap-3">
           <ThemeToggle />
           {isAdmin && (
-            <Button asChild variant="quiet" size="sm" className="rounded-full">
+            <Button
+              asChild
+              variant="quiet"
+              size="sm"
+              className="rounded-full soft-button-highlight focus-visible:ring-0 focus-visible:ring-offset-0"
+            >
               <Link to="/admin">
                 <LayoutDashboard className="h-4 w-4 mr-1.5" />
                 Админка

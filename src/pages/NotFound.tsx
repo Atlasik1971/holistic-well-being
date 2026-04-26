@@ -21,7 +21,12 @@ const NotFound = () => {
           <Button asChild variant="hero" size="lg">
             <Link to="/">На главную</Link>
           </Button>
-          <Button asChild variant="quiet" size="lg">
+          <Button
+            asChild
+            variant="quiet"
+            size="lg"
+            className="soft-button-highlight focus-visible:ring-0 focus-visible:ring-offset-0"
+          >
             <Link to="/contacts">Контакты</Link>
           </Button>
         </div>

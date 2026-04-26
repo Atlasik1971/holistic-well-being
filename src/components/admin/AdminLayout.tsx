@@ -50,7 +50,12 @@ const AdminLayout = () => {
           ))}
         </nav>
         <div className="p-3 border-t border-border space-y-2">
-          <Button asChild variant="quiet" size="sm" className="w-full justify-start">
+          <Button
+            asChild
+            variant="quiet"
+            size="sm"
+            className="w-full justify-start soft-button-highlight focus-visible:ring-0 focus-visible:ring-offset-0"
+          >
             <Link to="/" target="_blank">
               <ExternalLink className="h-4 w-4 mr-2" />
               Открыть сайт

@@ -143,9 +143,13 @@ const ChatWidget = () => {
               </div>
             </div>
             <button
+              type="button"
               onClick={closeChat}
               aria-label="Закрыть чат"
-              className="inline-flex h-9 w-9 items-center justify-center rounded-full hover:bg-background/60 text-foreground/70"
+              className={cn(
+                "inline-flex h-9 w-9 items-center justify-center rounded-full text-foreground/70",
+                "soft-button-highlight",
+              )}
             >
               <X className="h-4 w-4" />
             </button>

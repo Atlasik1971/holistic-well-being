@@ -124,12 +124,22 @@ const SubmissionsList = ({ table, title, description, bodyField, showFormat }: P
                   </div>
                   <div className="flex items-center gap-2">
                     {status !== "in_progress" && (
-                      <Button size="sm" variant="quiet" onClick={() => updateStatus(it.id, "in_progress")}>
+                      <Button
+                        size="sm"
+                        variant="quiet"
+                        className="soft-button-highlight focus-visible:ring-0 focus-visible:ring-offset-0"
+                        onClick={() => updateStatus(it.id, "in_progress")}
+                      >
                         В работу
                       </Button>
                     )}
                     {status !== "done" && (
-                      <Button size="sm" variant="quiet" onClick={() => updateStatus(it.id, "done")}>
+                      <Button
+                        size="sm"
+                        variant="quiet"
+                        className="soft-button-highlight focus-visible:ring-0 focus-visible:ring-offset-0"
+                        onClick={() => updateStatus(it.id, "done")}
+                      >
                         <Check className="h-3.5 w-3.5 mr-1" />
                         Закрыть
                       </Button>

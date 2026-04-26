@@ -178,6 +178,45 @@
   }
   .no-scrollbar::-webkit-scrollbar { display: none; }
   .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+  /* Мягкая подсветка — только к классу вручную, не к глобальному button */
+  .soft-button-highlight {
+    transition:
+      transform 0.25s ease,
+      box-shadow 0.25s ease,
+      background-color 0.25s ease,
+      border-color 0.25s ease,
+      color 0.25s ease;
+  }
+
+  .soft-button-highlight:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 10px 24px rgba(111, 127, 99, 0.22),
+      0 0 0 4px rgba(111, 127, 99, 0.1);
+  }
+
+  .soft-button-highlight:active {
+    transform: translateY(0);
+    box-shadow:
+      0 5px 14px rgba(111, 127, 99, 0.18),
+      0 0 0 3px rgba(111, 127, 99, 0.08);
+  }
+
+  .soft-button-highlight:focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 4px rgba(111, 127, 99, 0.22),
+      0 10px 24px rgba(111, 127, 99, 0.18);
+  }
+
+  .soft-button-highlight:disabled,
+  .soft-button-highlight[disabled] {
+    transform: none;
+    box-shadow: none;
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
 }
 
 @layer base {

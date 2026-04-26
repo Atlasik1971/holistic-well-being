@@ -141,7 +141,12 @@ const AdminServices = () => {
                     <ArrowDown className="h-4 w-4" />
                   </Button>
                   <Switch checked={s.is_published} onCheckedChange={() => togglePublished(s)} />
-                  <Button size="sm" variant="quiet" onClick={() => setEditing(s)}>
+                  <Button
+                    size="sm"
+                    variant="quiet"
+                    className="soft-button-highlight focus-visible:ring-0 focus-visible:ring-offset-0"
+                    onClick={() => setEditing(s)}
+                  >
                     Изменить
                   </Button>
                   <Button size="icon" variant="ghost" onClick={() => remove(s.id)} className="text-muted-foreground hover:text-destructive">
@@ -206,7 +211,12 @@ const AdminServices = () => {
                 <span className="text-sm">Опубликовать на сайте</span>
               </div>
               <div className="flex justify-end gap-2 pt-2">
-                <Button variant="quiet" onClick={() => setEditing(null)} disabled={saving}>
+                <Button
+                  variant="quiet"
+                  className="soft-button-highlight focus-visible:ring-0 focus-visible:ring-offset-0"
+                  onClick={() => setEditing(null)}
+                  disabled={saving}
+                >
                   Отмена
                 </Button>
                 <Button variant="hero" onClick={save} disabled={saving}>

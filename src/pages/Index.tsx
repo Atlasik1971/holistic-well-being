@@ -1,7 +1,8 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Section from "@/components/layout/Section";
-import { ArrowRight, Check, ShieldCheck, Sparkles, HeartHandshake, Leaf } from "lucide-react";
+import { ArrowRight, Check, ShieldCheck, Sparkles, HeartHandshake, Leaf, Volume2, VolumeX } from "lucide-react";
 import heroImage from "@/assets/hero-herbs.jpg";
 
 const topics = [
@@ -32,6 +33,10 @@ const steps = [
 ];
 
 const Index = () => {
+  const [videoFailed, setVideoFailed] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+  const heroVideoSrc = `${import.meta.env.BASE_URL}VID_20260116_191915_153.mp4`;
+
   return (
     <>
       {/* HERO */}
@@ -71,13 +76,37 @@ const Index = () => {
             </div>
             <div className="lg:col-span-5">
               <div className="relative rounded-3xl overflow-hidden shadow-card">
-                <img
-                  src={heroImage}
-                  alt="Свежие травы и керамическая чаша на льняной салфетке"
-                  width={1600}
-                  height={1200}
-                  className="w-full h-auto object-cover aspect-[4/5] lg:aspect-[3/4]"
-                />
+                {videoFailed ? (
+                  <img
+                    src={heroImage}
+                    alt="Свежие травы и керамическая чаша на льняной салфетке"
+                    width={1600}
+                    height={1200}
+                    className="w-full h-auto object-cover aspect-[4/5] lg:aspect-[3/4]"
+                  />
+                ) : (
+                  <>
+                    <video
+                      className="w-full h-auto object-cover aspect-[4/5] lg:aspect-[3/4]"
+                      src={heroVideoSrc}
+                      poster={heroImage}
+                      autoPlay
+                      muted={isMuted}
+                      loop
+                      playsInline
+                      preload="metadata"
+                      onError={() => setVideoFailed(true)}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setIsMuted((prev) => !prev)}
+                      aria-label={isMuted ? "Включить звук" : "Выключить звук"}
+                      className="absolute right-3 bottom-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-background/80 text-foreground shadow-soft backdrop-blur hover:bg-background"
+                    >
+                      {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           </div>

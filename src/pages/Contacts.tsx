@@ -10,7 +10,7 @@ import Section from "@/components/layout/Section";
 import { Send, MessageCircle, Phone, Mail, Clock, MapPin, Loader2, Check } from "lucide-react";
 import { z } from "zod";
 import { toast } from "sonner";
-import { supabase } from "@/integrations/supabase/client";
+import { isSupabaseEnabled, supabase } from "@/integrations/supabase/client";
 
 const channels = [
   { icon: Send, label: "Telegram", value: "@username", href: "https://t.me/" },
@@ -50,18 +50,24 @@ const Contacts = () => {
     }
     setErrors({});
     setSubmitting(true);
-    const { error } = await supabase.from("contact_messages").insert({
-      name: parsed.data.name,
-      contact: parsed.data.contact,
-      message: parsed.data.message,
-    });
+    const { error } = isSupabaseEnabled
+      ? await supabase.from("contact_messages").insert({
+          name: parsed.data.name,
+          contact: parsed.data.contact,
+          message: parsed.data.message,
+        })
+      : { error: null };
     setSubmitting(false);
     if (error) {
       toast.error("Не удалось отправить. Попробуйте ещё раз.");
       return;
     }
     setSent(true);
-    toast.success("Сообщение отправлено");
+    toast.success(
+      isSupabaseEnabled
+        ? "Сообщение отправлено"
+        : "Демо-режим: форма проверена локально, отправка в базу отключена.",
+    );
   };
 
   return (

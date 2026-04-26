@@ -6,7 +6,7 @@ import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { supabase } from "@/integrations/supabase/client";
+import { isSupabaseEnabled, supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/components/auth/AuthProvider";
 
 const schema = z.object({
@@ -36,6 +36,10 @@ const Auth = () => {
     });
     if (!parsed.success) {
       toast.error(parsed.error.issues[0]?.message ?? "Проверьте поля");
+      return;
+    }
+    if (!isSupabaseEnabled) {
+      toast.error("Вход в админку отключён: Supabase не настроен.");
       return;
     }
     setLoading(true);

@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { MessageCircle, Send, Phone, Check, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
+import { isSupabaseEnabled, supabase } from "@/integrations/supabase/client";
 
 type Channel = "telegram" | "whatsapp" | "max";
 
@@ -69,19 +69,25 @@ const Booking = () => {
     setSubmitting(true);
     const formatLabel = FORMAT_LABEL[result.data.format] ?? result.data.format;
     const channelLabel = channels.find((c) => c.id === result.data.channel)?.label ?? result.data.channel;
-    const { error } = await supabase.from("bookings").insert({
-      name: result.data.name,
-      contact: `${channelLabel}: ${result.data.contact}`,
-      format: formatLabel + (result.data.withDoctor ? " · в связке с врачом" : ""),
-      request: result.data.request,
-    });
+    const { error } = isSupabaseEnabled
+      ? await supabase.from("bookings").insert({
+          name: result.data.name,
+          contact: `${channelLabel}: ${result.data.contact}`,
+          format: formatLabel + (result.data.withDoctor ? " · в связке с врачом" : ""),
+          request: result.data.request,
+        })
+      : { error: null };
     setSubmitting(false);
     if (error) {
       toast.error("Не удалось отправить заявку. Попробуйте ещё раз.");
       return;
     }
     setSubmitted(true);
-    toast.success("Заявка отправлена. Я свяжусь с вами в течение 1–2 рабочих дней.");
+    toast.success(
+      isSupabaseEnabled
+        ? "Заявка отправлена. Я свяжусь с вами в течение 1–2 рабочих дней."
+        : "Демо-режим: форма проверена локально, отправка в базу отключена.",
+    );
   };
 
   return (

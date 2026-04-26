@@ -8,7 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import { z } from "zod";
 import { cn } from "@/lib/utils";
-import { supabase } from "@/integrations/supabase/client";
+import { isSupabaseEnabled, supabase } from "@/integrations/supabase/client";
 
 const phoneRegex = /^[0-9+\-\s()]{5,30}$/;
 
@@ -90,11 +90,13 @@ const ChatWidget = () => {
     }
     setSubmitting(true);
 
-    const { error } = await supabase.from("chat_leads").insert({
-      name: result.data.name,
-      contact: result.data.phone,
-      message: result.data.question,
-    });
+    const { error } = isSupabaseEnabled
+      ? await supabase.from("chat_leads").insert({
+          name: result.data.name,
+          contact: result.data.phone,
+          message: result.data.question,
+        })
+      : { error: null };
 
     // Fallback: если запись в БД не удалась — пробуем отправить заявку
     // напрямую в Telegram через edge-функцию, чтобы не потерять контакт.
@@ -117,7 +119,11 @@ const ChatWidget = () => {
       }
     }
 
-    toast.success("Спасибо! Я свяжусь с вами в течение 1–2 рабочих дней.");
+    toast.success(
+      isSupabaseEnabled
+        ? "Спасибо! Я свяжусь с вами в течение 1–2 рабочих дней."
+        : "Демо-режим: заявка проверена локально, отправка отключена.",
+    );
     // Автозакрытие чата с полным сбросом state.
     closeChat();
   };

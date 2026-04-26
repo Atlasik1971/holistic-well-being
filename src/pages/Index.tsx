@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import Section from "@/components/layout/Section";
 import { ArrowRight, Check, ShieldCheck, Sparkles, HeartHandshake, Leaf, Volume2, VolumeX } from "lucide-react";
 import heroImage from "@/assets/hero-herbs.jpg";
+import TextType from "@/components/TextType";
 
 const topics = [
   "Энергия и стабильное самочувствие в течение дня",
@@ -60,9 +61,21 @@ const Index = () => {
           <div className="grid gap-10 lg:gap-16 lg:grid-cols-12 items-center">
             <div className="lg:col-span-6 animate-fade-up">
               <div className="eyebrow mb-6">Клинический нутрициолог</div>
-              <h1 className="max-w-2xl">
-                Питание, в котором вам спокойно — каждый день
-              </h1>
+              <TextType
+                as="h1"
+                className="max-w-2xl"
+                text={["Питание, в котором вам спокойно — каждый день"]}
+                typingSpeed={75}
+                pauseDuration={1500}
+                deletingSpeed={50}
+                variableSpeedEnabled
+                variableSpeedMin={60}
+                variableSpeedMax={120}
+                showCursor
+                cursorCharacter="_"
+                cursorBlinkDuration={0.5}
+                loop={false}
+              />
               <p className="mt-6 max-w-xl text-lg text-muted-foreground leading-relaxed">
                 Помогаю выстроить рацион и режим под вашу жизнь, тело и задачи. Без жёстких диет
                 и универсальных схем — только понятная система, которая работает в долгую.

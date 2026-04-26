@@ -1,11 +1,70 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Section from "@/components/layout/Section";
-import { ArrowRight, Check, ShieldCheck, Sparkles, HeartHandshake, Leaf, Volume2, VolumeX } from "lucide-react";
+import { ArrowRight, Check, ShieldCheck, Stethoscope, FileText, MessageSquareHeart } from "lucide-react";
 import heroImage from "@/assets/hero-herbs.jpg";
 import TextType from "@/components/TextType";
 import ElectricBorder from "@/components/ui/ElectricBorder";
+import HeroVideo from "@/components/HeroVideo";
+import Seo from "@/components/seo/Seo";
+import JsonLd from "@/components/seo/JsonLd";
+
+const SITE_URL = "https://atlasik1971.github.io/holistic-well-being/";
+
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Татьяна Мельникова",
+  jobTitle: "Клинический нутрициолог",
+  url: SITE_URL,
+  knowsLanguage: ["ru"],
+  worksFor: {
+    "@type": "ProfessionalService",
+    name: "Консультации нутрициолога",
+    serviceType: "Nutrition consultation",
+    areaServed: "RU",
+    url: SITE_URL,
+  },
+};
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "Подойдёт ли консультация, если питание стало хаотичным?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Да. На консультации разберём текущий рацион, режим и привычки, найдём опорные точки и составим понятный план первых шагов.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Что если у меня нет сил готовить и держать диеты?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Я не работаю с жёсткими диетами. Подбираем решения, которые встраиваются в реальный ритм жизни и не требуют героических усилий.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Заменяет ли консультация нутрициолога визит к врачу?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Нет. Я работаю в зоне питания и образа жизни. Диагностикой и лечением заболеваний занимается врач — рекомендации согласуются с лечащим специалистом.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Сколько ждать ответа после заявки?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Отвечаю в течение 1–2 рабочих дней. Время до ближайшей свободной встречи зависит от текущей загрузки.",
+      },
+    },
+  ],
+};
 
 const topics = [
   "Энергия и стабильное самочувствие в течение дня",
@@ -50,12 +109,16 @@ const outcomes = [
 ];
 
 const Index = () => {
-  const [videoFailed, setVideoFailed] = useState(false);
-  const [isMuted, setIsMuted] = useState(true);
   const heroVideoSrc = `${import.meta.env.BASE_URL}VID_20260116_191915_153.mp4`;
 
   return (
     <>
+      <Seo
+        title="Питание, в котором вам спокойно — каждый день"
+        description="Клинический нутрициолог. Помогаю выстроить рацион и режим под вашу жизнь — без жёстких диет и универсальных схем. Консультации и сопровождение в связке с врачами."
+      />
+      <JsonLd id="person" data={personJsonLd} />
+      <JsonLd id="faq" data={faqJsonLd} />
       {/* HERO */}
       <section className="relative overflow-hidden">
         <div className="container-wide pt-10 md:pt-16 pb-16 md:pb-24">
@@ -92,54 +155,25 @@ const Index = () => {
               </div>
               <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-muted-foreground">
                 <div className="flex items-center gap-2">
-                  <Sparkles className="accent-icon" />
-                  Персональный подход
+                  <Stethoscope className="accent-icon" />
+                  В связке с врачами
                 </div>
                 <div className="flex items-center gap-2">
-                  <HeartHandshake className="accent-icon" />
-                  Бережное сопровождение
+                  <FileText className="accent-icon" />
+                  Письменный план после встречи
                 </div>
                 <div className="flex items-center gap-2">
-                  <Leaf className="accent-icon" />
-                  Реалистичный результат
+                  <MessageSquareHeart className="accent-icon" />
+                  Поддержка между сессиями
                 </div>
               </div>
             </div>
             <div className="lg:col-span-6">
-              <div className="relative rounded-3xl overflow-hidden shadow-card">
-                {videoFailed ? (
-                  <img
-                    src={heroImage}
-                    alt="Свежие травы и керамическая чаша на льняной салфетке"
-                    width={1600}
-                    height={1200}
-                    className="w-full h-auto object-cover aspect-video"
-                  />
-                ) : (
-                  <>
-                    <video
-                      className="w-full h-auto object-cover aspect-video"
-                      src={heroVideoSrc}
-                      poster={heroImage}
-                      autoPlay
-                      muted={isMuted}
-                      loop
-                      playsInline
-                      controls
-                      preload="metadata"
-                      onError={() => setVideoFailed(true)}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setIsMuted((prev) => !prev)}
-                      aria-label={isMuted ? "Включить звук" : "Выключить звук"}
-                      className="absolute right-3 bottom-3 inline-flex h-10 w-10 items-center justify-center rounded-full bg-background/80 text-foreground shadow-soft backdrop-blur hover:bg-background"
-                    >
-                      {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-                    </button>
-                  </>
-                )}
-              </div>
+              <HeroVideo
+                src={heroVideoSrc}
+                poster={heroImage}
+                altText="Свежие травы и керамическая чаша на льняной салфетке"
+              />
             </div>
           </div>
         </div>

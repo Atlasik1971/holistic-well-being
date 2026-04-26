@@ -2,12 +2,14 @@
 
 import React from "react";
 import { motion } from "motion/react";
+import InitialsAvatar from "@/components/reviews/InitialsAvatar";
 
 export type TestimonialItem = {
   text: string;
-  image: string;
   name: string;
   role: string;
+  /** Опционально: фото клиента. Если не указано — рендерим инициалы. */
+  image?: string;
 };
 
 export const TestimonialsColumn = (props: {
@@ -37,15 +39,19 @@ export const TestimonialsColumn = (props: {
                 key={`${name}-${i}-${index}`}
               >
                 <div className="text-sm leading-relaxed text-foreground/90">«{text}»</div>
-                <div className="flex items-center gap-2 mt-5">
-                  <img
-                    width={40}
-                    height={40}
-                    src={image}
-                    alt={name}
-                    className="h-10 w-10 rounded-full object-cover"
-                    loading="lazy"
-                  />
+                <div className="flex items-center gap-3 mt-5">
+                  {image ? (
+                    <img
+                      width={40}
+                      height={40}
+                      src={image}
+                      alt={name}
+                      className="h-10 w-10 rounded-full object-cover"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <InitialsAvatar name={name} />
+                  )}
                   <div className="flex flex-col">
                     <div className="font-medium tracking-tight leading-5">{name}</div>
                     <div className="leading-5 text-sm opacity-70 tracking-tight">{role}</div>

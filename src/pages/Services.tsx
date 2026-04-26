@@ -2,12 +2,17 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import PageHero from "@/components/layout/PageHero";
 import Section from "@/components/layout/Section";
+import Seo from "@/components/seo/Seo";
 import { Sparkles, ChefHat } from "lucide-react";
 import { services } from "@/data/services";
 
 const Services = () => {
   return (
     <>
+      <Seo
+        title="Услуги"
+        description="Разовая консультация и сопровождение нутрициолога: длительность, стоимость и формат работы. Выберите подходящий или напишите для уточнения."
+      />
       <PageHero
         eyebrow="Услуги"
         title="Понятные форматы работы"

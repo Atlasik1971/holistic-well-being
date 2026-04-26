@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import PageHero from "@/components/layout/PageHero";
 import Section from "@/components/layout/Section";
+import Seo from "@/components/seo/Seo";
 import aboutImage from "@/assets/about-portrait.png";
 import TiltedCard from "@/components/ui/TiltedCard";
 import { Compass, HeartHandshake, BookOpen, Sprout, Dna, GraduationCap, Sparkles } from "lucide-react";
@@ -32,6 +33,10 @@ const principles = [
 const About = () => {
   return (
     <>
+      <Seo
+        title="Обо мне"
+        description="Татьяна Мельникова — клинический нутрициолог. Спокойный, экспертный подход к питанию и образу жизни, без жёстких диет и универсальных схем."
+      />
       <PageHero
         eyebrow="Обо мне"
         title="Спокойный, экспертный взгляд на питание и образ жизни"
@@ -216,6 +221,7 @@ const About = () => {
             </p>
           </div>
           <div className="mt-10 grid gap-5 sm:grid-cols-3">
+            {/* TODO для клиента: уточните реальные цифры опыта (годы практики, кол-во клиентов). */}
             {[
               { k: "3+", v: "Года практики" },
               { k: "2", v: "Формата работы" },

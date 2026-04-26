@@ -1,5 +1,6 @@
 import PageHero from "@/components/layout/PageHero";
 import Section from "@/components/layout/Section";
+import Seo from "@/components/seo/Seo";
 
 const sections = [
   {
@@ -39,6 +40,10 @@ const sections = [
 const Privacy = () => {
   return (
     <>
+      <Seo
+        title="Политика конфиденциальности"
+        description="Какие персональные данные обрабатываются на сайте, в каких целях и как обеспечивается их защита."
+      />
       <PageHero
         eyebrow="Документы"
         title="Политика конфиденциальности"

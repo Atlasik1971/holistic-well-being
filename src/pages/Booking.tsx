@@ -7,6 +7,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import PageHero from "@/components/layout/PageHero";
 import Section from "@/components/layout/Section";
+import Seo from "@/components/seo/Seo";
 import { toast } from "sonner";
 import { z } from "zod";
 import { MessageCircle, Send, Phone, Check, Loader2 } from "lucide-react";
@@ -86,6 +87,10 @@ const Booking = () => {
 
   return (
     <>
+      <Seo
+        title="Запись на консультацию"
+        description="Запишитесь на консультацию нутрициолога: выберите мессенджер, заполните короткую анкету. Отвечу в течение 1–2 рабочих дней."
+      />
       <PageHero
         eyebrow="Запись"
         title="Запись на консультацию"
@@ -160,7 +165,9 @@ const Booking = () => {
                     ))}
                   </div>
                   {errors.channel && (
-                    <p className="mt-2 text-sm text-destructive">{errors.channel}</p>
+                    <p id="err-channel" role="alert" className="mt-2 text-sm text-destructive">
+                      {errors.channel}
+                    </p>
                   )}
                 </div>
 
@@ -169,8 +176,20 @@ const Booking = () => {
                   <div className="grid gap-5 sm:grid-cols-2">
                     <div>
                       <Label htmlFor="name">Как к вам обращаться</Label>
-                      <Input id="name" name="name" maxLength={80} required className="mt-2" />
-                      {errors.name && <p className="mt-1.5 text-sm text-destructive">{errors.name}</p>}
+                      <Input
+                        id="name"
+                        name="name"
+                        maxLength={80}
+                        required
+                        className="mt-2"
+                        aria-invalid={!!errors.name}
+                        aria-describedby={errors.name ? "err-name" : undefined}
+                      />
+                      {errors.name && (
+                        <p id="err-name" role="alert" className="mt-1.5 text-sm text-destructive">
+                          {errors.name}
+                        </p>
+                      )}
                     </div>
                     <div>
                       <Label htmlFor="contact">Контакт в выбранном мессенджере</Label>
@@ -181,8 +200,14 @@ const Booking = () => {
                         maxLength={120}
                         required
                         className="mt-2"
+                        aria-invalid={!!errors.contact}
+                        aria-describedby={errors.contact ? "err-contact" : undefined}
                       />
-                      {errors.contact && <p className="mt-1.5 text-sm text-destructive">{errors.contact}</p>}
+                      {errors.contact && (
+                        <p id="err-contact" role="alert" className="mt-1.5 text-sm text-destructive">
+                          {errors.contact}
+                        </p>
+                      )}
                     </div>
                   </div>
 
@@ -215,8 +240,14 @@ const Booking = () => {
                       required
                       placeholder="Что хотелось бы обсудить, есть ли назначения врача, что уже пробовали"
                       className="mt-2 resize-y"
+                      aria-invalid={!!errors.request}
+                      aria-describedby={errors.request ? "err-request" : undefined}
                     />
-                    {errors.request && <p className="mt-1.5 text-sm text-destructive">{errors.request}</p>}
+                    {errors.request && (
+                      <p id="err-request" role="alert" className="mt-1.5 text-sm text-destructive">
+                        {errors.request}
+                      </p>
+                    )}
                   </div>
 
                   <label className="flex items-start gap-3 rounded-xl bg-secondary/40 px-4 py-3 cursor-pointer">
@@ -227,13 +258,24 @@ const Booking = () => {
                   </label>
 
                   <label className="flex items-start gap-3">
-                    <Checkbox name="consent" id="consent" className="mt-0.5" required />
+                    <Checkbox
+                      name="consent"
+                      id="consent"
+                      className="mt-0.5"
+                      required
+                      aria-invalid={!!errors.consent}
+                      aria-describedby={errors.consent ? "err-consent" : undefined}
+                    />
                     <span className="text-sm text-muted-foreground leading-relaxed">
                       Согласен(на) с обработкой персональных данных и условиями{" "}
                       <Link to="/privacy" className="text-primary hover:underline">политики конфиденциальности</Link>
                     </span>
                   </label>
-                  {errors.consent && <p className="text-sm text-destructive">{errors.consent}</p>}
+                  {errors.consent && (
+                    <p id="err-consent" role="alert" className="text-sm text-destructive">
+                      {errors.consent}
+                    </p>
+                  )}
                 </div>
 
                 <div className="pt-2">

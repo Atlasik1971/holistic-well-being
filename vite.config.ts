@@ -1,4 +1,3 @@
-import { copyFileSync } from "node:fs";
 import path from "path";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
@@ -8,6 +7,8 @@ import { componentTagger } from "lovable-tagger";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // https://vitejs.dev/config/
+// Файл public/404.html отдаёт SPA-fallback по схеме Rafrex,
+// а декодер в index.html восстанавливает оригинальный URL.
 export default defineConfig(({ mode }) => ({
   // GitHub Pages serves project sites from /<repo-name>/
   base: "/holistic-well-being/",
@@ -18,17 +19,7 @@ export default defineConfig(({ mode }) => ({
       overlay: false,
     },
   },
-  plugins: [
-    react(),
-    mode === "development" && componentTagger(),
-    {
-      name: "copy-index-to-404",
-      writeBundle() {
-        const out = path.resolve(__dirname, "dist");
-        copyFileSync(path.join(out, "index.html"), path.join(out, "404.html"));
-      },
-    },
-  ].filter(Boolean),
+  plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

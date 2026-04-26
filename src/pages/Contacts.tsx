@@ -7,9 +7,21 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import PageHero from "@/components/layout/PageHero";
 import Section from "@/components/layout/Section";
-import { Loader2, Check } from "lucide-react";
+import Seo from "@/components/seo/Seo";
+import { Loader2, Check, Mail, MapPin, Send, MessageCircle, Phone } from "lucide-react";
 import { z } from "zod";
 import { toast } from "sonner";
+
+// TODO для клиента: подставьте реальные значения.
+// Если какого-то канала связи нет — просто закомментируйте/удалите соответствующую строку.
+const CONTACT_INFO = {
+  city: "Москва, работаю онлайн по всей России",
+  email: "hello@example.com",
+  telegram: "https://t.me/your_telegram",
+  whatsapp: "https://wa.me/79991234567",
+  phoneDisplay: "+7 (999) 123-45-67",
+  phoneTel: "+79991234567",
+};
 
 const schema = z.object({
   name: z.string().trim().min(2, "Укажите имя").max(80),
@@ -57,16 +69,71 @@ const Contacts = () => {
 
   return (
     <>
+      <Seo
+        title="Контакты"
+        description="Контакты нутрициолога: Telegram, WhatsApp, телефон и email. Отвечаю в течение 1–2 рабочих дней."
+      />
       <PageHero
         eyebrow="Контакты"
         title="Связаться со мной"
-        description="Для связи заполните форму — я отвечу в течение 1–2 рабочих дней."
+        description="Напишите в удобный мессенджер или заполните форму — я отвечу в течение 1–2 рабочих дней."
       />
 
-      <Section className="!pt-4">
-        <div className="container-narrow">
-          <div className="card-soft border-primary/20 bg-primary-soft/30">
-            Для связи заполните форму — я отвечу в течение 1–2 рабочих дней.
+      <Section className="!pt-2">
+        <div className="container-wide">
+          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+            <a
+              href={CONTACT_INFO.telegram}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="card-soft hover:border-primary/40 transition-colors"
+            >
+              <Send className="accent-icon" />
+              <div className="mt-4 font-medium">Telegram</div>
+              <div className="mt-1 text-sm text-muted-foreground break-all">
+                {CONTACT_INFO.telegram.replace("https://t.me/", "@")}
+              </div>
+            </a>
+            <a
+              href={CONTACT_INFO.whatsapp}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="card-soft hover:border-primary/40 transition-colors"
+            >
+              <MessageCircle className="accent-icon" />
+              <div className="mt-4 font-medium">WhatsApp</div>
+              <div className="mt-1 text-sm text-muted-foreground">
+                {CONTACT_INFO.phoneDisplay}
+              </div>
+            </a>
+            <a
+              href={`tel:${CONTACT_INFO.phoneTel}`}
+              className="card-soft hover:border-primary/40 transition-colors"
+            >
+              <Phone className="accent-icon" />
+              <div className="mt-4 font-medium">Телефон</div>
+              <div className="mt-1 text-sm text-muted-foreground">
+                {CONTACT_INFO.phoneDisplay}
+              </div>
+            </a>
+            <a
+              href={`mailto:${CONTACT_INFO.email}`}
+              className="card-soft hover:border-primary/40 transition-colors"
+            >
+              <Mail className="accent-icon" />
+              <div className="mt-4 font-medium">Email</div>
+              <div className="mt-1 text-sm text-muted-foreground break-all">
+                {CONTACT_INFO.email}
+              </div>
+            </a>
+          </div>
+
+          <div className="mt-6 card-soft border-primary/20 bg-primary-soft/30 flex items-start gap-3">
+            <MapPin className="accent-icon" />
+            <div>
+              <div className="font-medium">Где провожу консультации</div>
+              <div className="mt-1 text-sm text-muted-foreground">{CONTACT_INFO.city}</div>
+            </div>
           </div>
         </div>
       </Section>
@@ -89,8 +156,20 @@ const Contacts = () => {
               <div className="grid gap-5 sm:grid-cols-2">
                 <div>
                   <Label htmlFor="c-name">Имя</Label>
-                  <Input id="c-name" name="name" maxLength={80} required className="mt-2" />
-                  {errors.name && <p className="mt-1.5 text-sm text-destructive">{errors.name}</p>}
+                  <Input
+                    id="c-name"
+                    name="name"
+                    maxLength={80}
+                    required
+                    className="mt-2"
+                    aria-invalid={!!errors.name}
+                    aria-describedby={errors.name ? "err-c-name" : undefined}
+                  />
+                  {errors.name && (
+                    <p id="err-c-name" role="alert" className="mt-1.5 text-sm text-destructive">
+                      {errors.name}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <Label htmlFor="c-contact">Контакт для ответа</Label>
@@ -101,8 +180,14 @@ const Contacts = () => {
                     maxLength={120}
                     required
                     className="mt-2"
+                    aria-invalid={!!errors.contact}
+                    aria-describedby={errors.contact ? "err-c-contact" : undefined}
                   />
-                  {errors.contact && <p className="mt-1.5 text-sm text-destructive">{errors.contact}</p>}
+                  {errors.contact && (
+                    <p id="err-c-contact" role="alert" className="mt-1.5 text-sm text-destructive">
+                      {errors.contact}
+                    </p>
+                  )}
                 </div>
               </div>
               <div>
@@ -114,17 +199,34 @@ const Contacts = () => {
                   maxLength={2000}
                   required
                   className="mt-2 resize-y"
+                  aria-invalid={!!errors.message}
+                  aria-describedby={errors.message ? "err-c-message" : undefined}
                 />
-                {errors.message && <p className="mt-1.5 text-sm text-destructive">{errors.message}</p>}
+                {errors.message && (
+                  <p id="err-c-message" role="alert" className="mt-1.5 text-sm text-destructive">
+                    {errors.message}
+                  </p>
+                )}
               </div>
               <label className="flex items-start gap-3">
-                <Checkbox name="consent" id="c-consent" className="mt-0.5" required />
+                <Checkbox
+                  name="consent"
+                  id="c-consent"
+                  className="mt-0.5"
+                  required
+                  aria-invalid={!!errors.consent}
+                  aria-describedby={errors.consent ? "err-c-consent" : undefined}
+                />
                 <span className="text-sm text-muted-foreground leading-relaxed">
                   Согласен(на) с обработкой персональных данных и условиями{" "}
                   <Link to="/privacy" className="text-primary hover:underline">политики конфиденциальности</Link>
                 </span>
               </label>
-              {errors.consent && <p className="text-sm text-destructive">{errors.consent}</p>}
+              {errors.consent && (
+                <p id="err-c-consent" role="alert" className="text-sm text-destructive">
+                  {errors.consent}
+                </p>
+              )}
               <Button type="submit" variant="hero" size="lg" disabled={submitting}>
                 {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : "Отправить"}
               </Button>

@@ -1,18 +1,27 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import PageHero from "@/components/layout/PageHero";
 import Section from "@/components/layout/Section";
-import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
+import { Quote } from "lucide-react";
 import { reviews } from "@/data/reviews";
+import { TestimonialsColumn, type TestimonialItem } from "@/components/ui/testimonials-columns-1";
 
 const Reviews = () => {
-  const [i, setI] = useState(0);
+  const photos = [
+    "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=80",
+    "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&q=80",
+    "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=120&q=80",
+  ];
+  const animatedTestimonials: TestimonialItem[] = reviews.map((r, idx) => ({
+    text: r.text,
+    image: photos[idx % photos.length],
+    name: r.clientName,
+    role: r.format,
+  }));
 
-  const total = reviews.length;
-  const prev = () => setI((p) => (p - 1 + total) % total);
-  const next = () => setI((p) => (p + 1) % total);
-  const current = reviews[i];
+  const firstColumn = animatedTestimonials;
+  const secondColumn = [...animatedTestimonials.slice(1), animatedTestimonials[0]];
+  const thirdColumn = [...animatedTestimonials.slice(2), ...animatedTestimonials.slice(0, 2)];
 
   return (
     <>
@@ -23,52 +32,12 @@ const Reviews = () => {
       />
 
       <Section className="!pt-4">
-        <div className="container-narrow">
-          <>
-            <div className="card-soft relative bg-primary-soft/30 border-primary/20 min-h-[260px] md:min-h-[280px]">
-              <Quote className="absolute -top-3 left-6 md:left-8 h-8 w-8 text-primary bg-background rounded-full p-1.5 shadow-soft" />
-              <p className="font-serif text-xl md:text-2xl leading-relaxed text-foreground/90 pt-2">
-                «{current.text}»
-              </p>
-              <div className="mt-6 pt-6 border-t border-border/60">
-                <div className="font-medium">{current.clientName}</div>
-                <div className="text-sm text-muted-foreground">{current.format}</div>
-              </div>
-            </div>
-
-            {total > 1 && (
-              <div className="mt-6 flex items-center justify-between">
-                <div className="flex gap-2">
-                  {reviews.map((_, idx) => (
-                    <button
-                      key={idx}
-                      aria-label={`Отзыв ${idx + 1}`}
-                      onClick={() => setI(idx)}
-                      className={`h-1.5 rounded-full transition-all ${
-                        i === idx ? "w-8 bg-primary" : "w-1.5 bg-border"
-                      }`}
-                    />
-                  ))}
-                </div>
-                <div className="flex gap-2">
-                  <button
-                    onClick={prev}
-                    aria-label="Предыдущий"
-                    className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background hover:bg-secondary transition-colors"
-                  >
-                    <ChevronLeft className="h-4 w-4" />
-                  </button>
-                  <button
-                    onClick={next}
-                    aria-label="Следующий"
-                    className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background hover:bg-secondary transition-colors"
-                  >
-                    <ChevronRight className="h-4 w-4" />
-                  </button>
-                </div>
-              </div>
-            )}
-          </>
+        <div className="container-wide">
+          <div className="flex justify-center gap-6 [mask-image:linear-gradient(to_bottom,transparent,black_18%,black_82%,transparent)] max-h-[640px] overflow-hidden">
+            <TestimonialsColumn testimonials={firstColumn} duration={18} />
+            <TestimonialsColumn testimonials={secondColumn} className="hidden md:block" duration={20} />
+            <TestimonialsColumn testimonials={thirdColumn} className="hidden lg:block" duration={16} />
+          </div>
         </div>
       </Section>
 

@@ -177,3 +177,23 @@
   .no-scrollbar::-webkit-scrollbar { display: none; }
   .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 }
+
+@layer base {
+  /* Глобальная мягкая подсветка для всех Lucide-иконок в палитре сайта */
+  svg.lucide {
+    transition: filter 0.28s ease, transform 0.28s ease, color 0.28s ease;
+    filter:
+      drop-shadow(0 0 0.35rem hsl(var(--primary) / 0.20))
+      drop-shadow(0 0 0.7rem hsl(var(--primary) / 0.14));
+    will-change: filter, transform;
+  }
+
+  :where(a, button, .card-soft, [role="button"], label):hover svg.lucide,
+  :where(a, button, .card-soft, [role="button"], label):focus-visible svg.lucide {
+    filter:
+      drop-shadow(0 0 0.45rem hsl(var(--primary) / 0.35))
+      drop-shadow(0 0 1rem hsl(var(--primary) / 0.24))
+      drop-shadow(0 0 1.4rem hsl(var(--primary) / 0.15));
+    transform: translateY(-1px) scale(1.02);
+  }
+}

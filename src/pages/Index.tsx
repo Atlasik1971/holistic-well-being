@@ -65,15 +65,17 @@ const Index = () => {
                 as="h1"
                 className="max-w-2xl"
                 text={["Питание, в котором вам спокойно — каждый день"]}
-                typingSpeed={75}
-                pauseDuration={1500}
-                deletingSpeed={50}
+                typingSpeed={95}
+                initialDelay={250}
+                pauseDuration={2500}
+                deletingSpeed={40}
                 variableSpeedEnabled
-                variableSpeedMin={60}
-                variableSpeedMax={120}
+                variableSpeedMin={85}
+                variableSpeedMax={130}
                 showCursor
-                cursorCharacter="_"
-                cursorBlinkDuration={0.5}
+                hideCursorWhileTyping
+                cursorCharacter="|"
+                cursorBlinkDuration={0.7}
                 loop={false}
               />
               <p className="mt-6 max-w-xl text-lg text-muted-foreground leading-relaxed">

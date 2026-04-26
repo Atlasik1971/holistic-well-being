@@ -31,6 +31,8 @@ const formSchema = z.object({
 
 const ChatWidget = () => {
   const [open, setOpen] = useState(false);
+  /** Смена key при открытии: новые id/name, без кэша автозаполнителя. */
+  const [formKey, setFormKey] = useState(0);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [question, setQuestion] = useState("");
@@ -59,6 +61,7 @@ const ChatWidget = () => {
       closeChat();
     } else {
       resetState();
+      setFormKey((k) => k + 1);
       setOpen(true);
     }
   };
@@ -170,27 +173,36 @@ const ChatWidget = () => {
               </div>
             </div>
 
-            <form onSubmit={onSubmit} className="rounded-xl border border-border bg-card p-3 space-y-3">
-              <div className="space-y-1.5">
-                <label htmlFor="chat-name" className="text-xs font-medium text-foreground/80">
+            <form
+              key={formKey}
+              onSubmit={onSubmit}
+              className="rounded-xl border border-border bg-card p-3 space-y-3"
+              autoComplete="off"
+            >
+              <div className="space-y-1.5" data-lpignore="true">
+                <label htmlFor={`fd-name-${formKey}`} className="text-xs font-medium text-foreground/80">
                   Имя
                 </label>
                 <Input
-                  id="chat-name"
+                  id={`fd-name-${formKey}`}
+                  name={`q-${formKey}`}
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Как к вам обращаться"
                   maxLength={80}
                   required
+                  autoComplete="off"
+                  autoCorrect="off"
                 />
               </div>
 
-              <div className="space-y-1.5">
-                <label htmlFor="chat-phone" className="text-xs font-medium text-foreground/80">
+              <div className="space-y-1.5" data-lpignore="true">
+                <label htmlFor={`fd-phone-${formKey}`} className="text-xs font-medium text-foreground/80">
                   Телефон
                 </label>
                 <Input
-                  id="chat-phone"
+                  id={`fd-phone-${formKey}`}
+                  name={`p-${formKey}`}
                   type="tel"
                   inputMode="tel"
                   value={phone}
@@ -198,15 +210,17 @@ const ChatWidget = () => {
                   placeholder="+7 (___) ___-__-__"
                   maxLength={30}
                   required
+                  autoComplete="off"
                 />
               </div>
 
-              <div className="space-y-1.5">
-                <label htmlFor="chat-question" className="text-xs font-medium text-foreground/80">
+              <div className="space-y-1.5" data-lpignore="true">
+                <label htmlFor={`fd-q-${formKey}`} className="text-xs font-medium text-foreground/80">
                   Ваш вопрос
                 </label>
                 <Textarea
-                  id="chat-question"
+                  id={`fd-q-${formKey}`}
+                  name={`m-${formKey}`}
                   value={question}
                   onChange={(e) => setQuestion(e.target.value)}
                   placeholder="Опишите вопрос, ответа на который вы не нашли на сайте"
@@ -214,6 +228,7 @@ const ChatWidget = () => {
                   rows={4}
                   className="resize-none text-sm"
                   required
+                  autoComplete="off"
                 />
                 <div className="text-[11px] text-muted-foreground text-right">
                   {question.length}/1000

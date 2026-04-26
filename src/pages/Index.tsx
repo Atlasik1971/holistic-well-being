@@ -82,18 +82,19 @@ const Index = () => {
                     alt="Свежие травы и керамическая чаша на льняной салфетке"
                     width={1600}
                     height={1200}
-                    className="w-full h-auto object-cover aspect-[4/5] lg:aspect-[3/4]"
+                    className="w-full h-auto object-cover aspect-video"
                   />
                 ) : (
                   <>
                     <video
-                      className="w-full h-auto object-cover aspect-[4/5] lg:aspect-[3/4]"
+                      className="w-full h-auto object-cover aspect-video"
                       src={heroVideoSrc}
                       poster={heroImage}
                       autoPlay
                       muted={isMuted}
                       loop
                       playsInline
+                      controls
                       preload="metadata"
                       onError={() => setVideoFailed(true)}
                     />

@@ -2,7 +2,8 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import PageHero from "@/components/layout/PageHero";
 import Section from "@/components/layout/Section";
-import aboutImage from "@/assets/about-portrait.jpg";
+import aboutImage from "@/assets/about-portrait.png";
+import TiltedCard from "@/components/ui/TiltedCard";
 import { Compass, HeartHandshake, BookOpen, Sprout, Dna, GraduationCap, Sparkles } from "lucide-react";
 
 const principles = [
@@ -39,15 +40,25 @@ const About = () => {
 
       <section className="container-wide">
         <div className="grid gap-12 lg:grid-cols-12 items-start">
-          <div className="lg:col-span-5">
-            <div className="rounded-3xl overflow-hidden shadow-card">
-              <img
-                src={aboutImage}
-                alt="Мельникова Татьяна — клинический нутрициолог"
-                width={1024}
-                height={1024}
-                loading="lazy"
-                className="w-full h-auto object-cover aspect-[4/5]"
+          <div className="lg:col-span-5 w-full max-w-sm lg:max-w-none mx-auto lg:mx-0">
+            <div className="rounded-3xl overflow-visible shadow-card p-1 sm:p-0">
+              <TiltedCard
+                imageSrc={aboutImage}
+                altText="Татьяна Мельникова — клинический нутрициолог"
+                captionText="Татьяна Мельникова"
+                containerHeight="min(32rem, 80vw)"
+                containerWidth="100%"
+                imageHeight="100%"
+                imageWidth="100%"
+                rotateAmplitude={12}
+                scaleOnHover={1.05}
+                showMobileWarning={false}
+                showTooltip
+                displayOverlayContent
+                figureClassName="w-full"
+                overlayContent={
+                  <p className="tilted-card-demo-text">Клинический нутрициолог</p>
+                }
               />
             </div>
           </div>

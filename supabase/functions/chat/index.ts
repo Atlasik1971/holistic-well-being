@@ -85,16 +85,21 @@ Deno.serve(async (req) => {
     }
 
     // Базовая валидация и ограничение контекста
+    type ChatRole = "user" | "assistant";
+    type ValidMsg = { role: ChatRole; content: string };
+    const isValidMsg = (m: unknown): m is ValidMsg => {
+      if (!m || typeof m !== "object") return false;
+      const o = m as Record<string, unknown>;
+      return (
+        (o.role === "user" || o.role === "assistant") &&
+        typeof o.content === "string" &&
+        o.content.length <= 4000
+      );
+    };
     const trimmed = messages
-      .filter(
-        (m: any) =>
-          m &&
-          (m.role === "user" || m.role === "assistant") &&
-          typeof m.content === "string" &&
-          m.content.length <= 4000,
-      )
+      .filter(isValidMsg)
       .slice(-20)
-      .map((m: any) => ({ role: m.role, content: m.content }));
+      .map((m) => ({ role: m.role, content: m.content }));
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",

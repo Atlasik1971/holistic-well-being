@@ -105,7 +105,7 @@ const SubmissionsList = ({ table, title, description, bodyField, showFormat }: P
         <div className="space-y-4">
           {items.map((it) => {
             const status = (it.status as Status) || "new";
-            const body = (it as any)[bodyField] as string | null | undefined;
+            const body = bodyField === "request" ? it.request : it.message;
             return (
               <div key={it.id} className="card-soft">
                 <div className="flex flex-wrap items-start justify-between gap-3">

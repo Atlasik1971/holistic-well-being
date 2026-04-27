@@ -10,15 +10,41 @@ import Section from "@/components/layout/Section";
 import Seo from "@/components/seo/Seo";
 import { toast } from "sonner";
 import { z } from "zod";
-import { MessageCircle, Send, Phone, Check, Loader2 } from "lucide-react";
+import { Check, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
+import type { ComponentType, SVGProps } from "react";
 
 type Channel = "telegram" | "whatsapp" | "max";
 
-const channels: { id: Channel; label: string; icon: typeof Send; hint: string }[] = [
-  { id: "telegram", label: "Telegram", icon: Send, hint: "Удобно, быстро" },
-  { id: "whatsapp", label: "WhatsApp", icon: MessageCircle, hint: "Привычный мессенджер" },
-  { id: "max", label: "Max", icon: Phone, hint: "Российский мессенджер" },
+const TelegramIcon = (props: SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" {...props}>
+    <path
+      d="M21.2 4.7 3.9 11.4c-.8.3-.8 1.4 0 1.7l4.4 1.5c.4.2.9.1 1.3-.2l8-6.1c.2-.2.5.1.3.3l-6.5 6.8c-.3.3-.4.8-.3 1.2l.9 3.8c.2.8 1.2 1.1 1.8.5l2.4-2.3c.4-.4 1-.4 1.4 0l3.2 2.3c.7.5 1.6.1 1.8-.7l2.7-14c.2-1-.8-1.8-1.8-1.4Z"
+      fill="currentColor"
+    />
+  </svg>
+);
+
+const WhatsAppIcon = (props: SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" {...props}>
+    <path
+      d="M12 3.6a8.4 8.4 0 0 0-7.3 12.5l-1 4a.7.7 0 0 0 .9.8l3.8-1a8.4 8.4 0 1 0 3.6-16.3Zm0 1.8a6.6 6.6 0 1 1 0 13.2c-1.2 0-2.3-.3-3.4-.9a.9.9 0 0 0-.6-.1l-2 .5.5-2a1 1 0 0 0-.1-.6A6.6 6.6 0 0 1 12 5.4Zm-2.4 3.2c-.2 0-.4.1-.6.4-.2.2-.7.7-.7 1.7s.7 2 1.6 2.8c1.2 1.1 2.8 1.8 3.9 2 .9.1 1.3-.1 1.6-.4.3-.3.6-.8.7-1.2 0-.2 0-.4-.2-.5l-1.3-.6c-.2-.1-.4 0-.5.2l-.5.6c-.1.2-.3.2-.5.1-.4-.1-1.2-.5-1.9-1.2-.5-.5-.9-1.1-1.1-1.5-.1-.2 0-.4.1-.5l.4-.5c.1-.2.2-.4.1-.6l-.5-1.4c-.1-.3-.4-.4-.6-.4h-.5Z"
+      fill="currentColor"
+    />
+  </svg>
+);
+
+const MaxIcon = (props: SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" {...props}>
+    <rect x="3.2" y="4.2" width="17.6" height="15.6" rx="4.2" stroke="currentColor" strokeWidth="1.7" />
+    <path d="m7.2 15.8 2-7.6h1.1l1.7 3.9 1.7-3.9h1.1l2 7.6h-1.6l-1-3.9-1.5 3.3h-1.3L9.8 12l-1 3.8H7.2Z" fill="currentColor" />
+  </svg>
+);
+
+const channels: { id: Channel; label: string; icon: ComponentType<SVGProps<SVGSVGElement>>; hint: string }[] = [
+  { id: "telegram", label: "Telegram", icon: TelegramIcon, hint: "Удобно, быстро" },
+  { id: "whatsapp", label: "WhatsApp", icon: WhatsAppIcon, hint: "Привычный мессенджер" },
+  { id: "max", label: "Max", icon: MaxIcon, hint: "Российский мессенджер" },
 ];
 
 const formSchema = z.object({
@@ -148,7 +174,10 @@ const Booking = () => {
                             : "border-border bg-background hover:border-primary/40"
                         }`}
                       >
-                        <Icon className={`accent-icon ${channel === id ? "" : "opacity-70"}`} />
+                        <Icon
+                          className={`accent-icon ${channel === id ? "" : "opacity-70"}`}
+                          style={{ width: 36, height: 36, padding: 8 }}
+                        />
                         <div className="mt-3 font-medium">{label}</div>
                         <div className="text-xs text-muted-foreground mt-0.5">{hint}</div>
                       </button>

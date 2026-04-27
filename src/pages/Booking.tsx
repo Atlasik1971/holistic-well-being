@@ -67,16 +67,6 @@ const Booking = () => {
     }
     setErrors({});
     setSubmitting(true);
-    const _formatLabel = FORMAT_LABEL[result.data.format] ?? result.data.format;
-    const _channelLabel = channels.find((c) => c.id === result.data.channel)?.label ?? result.data.channel;
-    const _demoPayload = {
-      name: result.data.name,
-      contact: result.data.contact,
-      channel: _channelLabel,
-      format: _formatLabel + (result.data.withDoctor ? " · в связке с врачом" : ""),
-      request: result.data.request,
-    };
-    void _demoPayload;
     setSubmitting(false);
     e.currentTarget.reset();
     setChannel("");
@@ -253,7 +243,7 @@ const Booking = () => {
                   <label className="flex items-start gap-3 rounded-xl bg-secondary/40 px-4 py-3 cursor-pointer">
                     <Checkbox name="withDoctor" id="withDoctor" className="mt-0.5" />
                     <span className="text-sm text-foreground/85">
-                      Я работаю в связке с врачом и готов(а) обсудить совместный формат
+                      У меня есть лечащий врач, и рекомендации по питанию важно согласовывать с ним
                     </span>
                   </label>
 

@@ -92,13 +92,6 @@ const ChatWidget = () => {
     }
     setSubmitting(true);
 
-    const demoPayload = {
-      name: result.data.name,
-      phone: result.data.phone,
-      message: result.data.question,
-    };
-    void demoPayload;
-
     toast.success("Спасибо за сообщение! Я получила ваш запрос и свяжусь с вами в ближайшее время.");
     // Автозакрытие чата с полным сбросом state.
     closeChat();

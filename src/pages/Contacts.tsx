@@ -12,8 +12,6 @@ import { Loader2, Check, Mail, MapPin, Send, MessageCircle, Phone } from "lucide
 import { z } from "zod";
 import { toast } from "sonner";
 
-// TODO для клиента: подставьте реальные значения.
-// Если какого-то канала связи нет — просто закомментируйте/удалите соответствующую строку.
 const CONTACT_INFO = {
   city: "Москва, работаю онлайн по всей России",
   email: "hello@example.com",
@@ -54,12 +52,6 @@ const Contacts = () => {
     }
     setErrors({});
     setSubmitting(true);
-    const demoPayload = {
-      name: parsed.data.name,
-      contact: parsed.data.contact,
-      message: parsed.data.message,
-    };
-    void demoPayload;
     setSubmitting(false);
     e.currentTarget.reset();
     setErrors({});

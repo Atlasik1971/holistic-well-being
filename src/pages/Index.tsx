@@ -149,7 +149,7 @@ const Index = () => {
     <>
       <Seo
         title="Питание, в котором вам спокойно — каждый день"
-        description="Клинический нутрициолог. Помогаю выстроить рацион и режим под вашу жизнь — без жёстких диет и универсальных схем. Консультации и сопровождение в связке с врачами."
+        description="Татьяна Мельникова — клинический нутрициолог. Помогаю выстроить рацион и режим под вашу жизнь — без жёстких диет и универсальных схем."
       />
       <JsonLd id="person" data={personJsonLd} />
       <JsonLd id="faq" data={faqJsonLd} />
@@ -158,10 +158,13 @@ const Index = () => {
         <div className="container-wide pt-10 md:pt-16 pb-16 md:pb-24">
           <div className="grid gap-10 lg:gap-16 lg:grid-cols-12 items-center">
             <div className="lg:col-span-6 animate-fade-up">
-              <div className="eyebrow mb-6">Клинический нутрициолог</div>
+              <div className="eyebrow mb-4">Клинический нутрициолог</div>
+              <p className="font-serif text-lg md:text-xl text-foreground/90">
+                Татьяна Мельникова - клинический нутрициолог
+              </p>
               <TextType
                 as="h1"
-                className="max-w-2xl"
+                className="max-w-2xl mt-3"
                 text={["Питание, в котором вам спокойно — каждый день"]}
                 typingSpeed={95}
                 initialDelay={250}
@@ -190,7 +193,7 @@ const Index = () => {
               <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-muted-foreground">
                 <div className="flex items-center gap-2">
                   <Stethoscope className="accent-icon" />
-                  В связке с врачами
+                  Деликатный и персонализированный подход
                 </div>
                 <div className="flex items-center gap-2">
                   <FileText className="accent-icon" />

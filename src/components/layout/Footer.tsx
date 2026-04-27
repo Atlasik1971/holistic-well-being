@@ -10,10 +10,13 @@ const Footer = () => {
       <div className="container-wide py-14 md:py-20">
         <div className="grid gap-12 md:grid-cols-12">
           <div className="md:col-span-5">
-            <div className="font-serif text-2xl text-foreground">Нутрициолог</div>
+            <div className="font-serif text-2xl text-foreground">Татьяна Мельникова</div>
+            <div className="mt-1 text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+              клинический нутрициолог
+            </div>
             <p className="mt-4 max-w-md text-sm text-muted-foreground leading-relaxed">
-              Консультационное сопровождение по питанию и образу жизни — в связке с врачами,
-              после консервативного лечения. Не заменяю медицинскую помощь.
+              Консультационное сопровождение по питанию, режиму и пищевым привычкам в формате
+              персонального экспертного сопровождения.
             </p>
           </div>
 
@@ -38,10 +41,11 @@ const Footer = () => {
         </div>
 
         <div className="mt-12 pt-8 border-t border-border/70 flex flex-col md:flex-row gap-3 md:items-center md:justify-between text-xs text-muted-foreground">
-          <div>© {year} Нутрициолог. Все права защищены.</div>
+          <div>© {year} Татьяна Мельникова. Все права защищены.</div>
           <div className="max-w-2xl md:flex-1 md:text-right">
             Информация на сайте носит ознакомительный характер и не является медицинской рекомендацией.
-            Работа с заболеваниями — компетенция врача.
+            Нутрициолог не ставит диагнозы и не назначает лечение; при наличии заболеваний
+            рекомендации по питанию важно согласовывать с врачом.
           </div>
           <Link
             to={adminHref}

@@ -39,10 +39,15 @@ const Header = () => {
       <div className="container-wide flex h-16 md:h-20 items-center justify-between">
         <Link
           to="/"
-          className="font-serif text-lg md:text-xl tracking-tight text-foreground"
+          className="flex flex-col leading-none"
           onClick={() => setOpen(false)}
         >
-          Нутрициолог
+          <span className="font-serif text-lg md:text-xl tracking-tight text-foreground">
+            Татьяна Мельникова
+          </span>
+          <span className="mt-1 text-[10px] md:text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+            клинический нутрициолог
+          </span>
         </Link>
 
         <nav className="hidden lg:flex items-center gap-8">

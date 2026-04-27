@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type PointerEvent } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Section from "@/components/layout/Section";
@@ -136,6 +136,14 @@ const outcomes = [
 const Index = () => {
   const heroVideoSrc = `${import.meta.env.BASE_URL}VID_20260116_191915_153.mp4`;
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
+  const isTouchLike = () => window.matchMedia("(hover: none), (pointer: coarse)").matches;
+  const handleCardPointerDown = (id: string, e: PointerEvent<HTMLElement>) => {
+    if (!isTouchLike()) return;
+    if (activeCardId !== id) {
+      e.preventDefault();
+      setActiveCardId(id);
+    }
+  };
 
   return (
     <>
@@ -258,6 +266,7 @@ const Index = () => {
                 tabIndex={0}
                 onMouseEnter={() => setActiveCardId(`format-${f.title}`)}
                 onMouseLeave={() => setActiveCardId((prev) => (prev === `format-${f.title}` ? null : prev))}
+                onPointerDown={(e) => handleCardPointerDown(`format-${f.title}`, e)}
               >
                 <div className="nutrition-flip-card-inner">
                   <div className="nutrition-flip-card-front items-start text-left">
@@ -302,6 +311,7 @@ const Index = () => {
                 tabIndex={0}
                 onMouseEnter={() => setActiveCardId(`step-${s.n}`)}
                 onMouseLeave={() => setActiveCardId((prev) => (prev === `step-${s.n}` ? null : prev))}
+                onPointerDown={(e) => handleCardPointerDown(`step-${s.n}`, e)}
               >
                 <div className="nutrition-flip-card-inner">
                   <div className="nutrition-flip-card-front items-start text-left">

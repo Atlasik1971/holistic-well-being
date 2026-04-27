@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type PointerEvent } from "react";
 import PageHero from "@/components/layout/PageHero";
 import Section from "@/components/layout/Section";
 import Seo from "@/components/seo/Seo";
@@ -51,6 +51,14 @@ const documents = [
 
 const Education = () => {
   const [activeCardId, setActiveCardId] = useState<number | null>(null);
+  const isTouchLike = () => window.matchMedia("(hover: none), (pointer: coarse)").matches;
+  const handleCardPointerDown = (id: number, e: PointerEvent<HTMLElement>) => {
+    if (!isTouchLike()) return;
+    if (activeCardId !== id) {
+      e.preventDefault();
+      setActiveCardId(id);
+    }
+  };
 
   return (
     <>
@@ -74,6 +82,7 @@ const Education = () => {
                 tabIndex={0}
                 onMouseEnter={() => setActiveCardId(id)}
                 onMouseLeave={() => setActiveCardId((prev) => (prev === id ? null : prev))}
+                onPointerDown={(e) => handleCardPointerDown(id, e)}
               >
                 <div className="nutrition-flip-card-inner">
                   <div className="nutrition-flip-card-front items-center text-center">

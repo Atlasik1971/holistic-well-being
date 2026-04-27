@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type PointerEvent } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import PageHero from "@/components/layout/PageHero";
@@ -33,6 +33,14 @@ const principles = [
 
 const About = () => {
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
+  const isTouchLike = () => window.matchMedia("(hover: none), (pointer: coarse)").matches;
+  const handleCardPointerDown = (id: string, e: PointerEvent<HTMLElement>) => {
+    if (!isTouchLike()) return;
+    if (activeCardId !== id) {
+      e.preventDefault();
+      setActiveCardId(id);
+    }
+  };
 
   return (
     <>
@@ -140,6 +148,7 @@ const About = () => {
                       tabIndex={0}
                       onMouseEnter={() => setActiveCardId(`trust-${title}`)}
                       onMouseLeave={() => setActiveCardId((prev) => (prev === `trust-${title}` ? null : prev))}
+                      onPointerDown={(e) => handleCardPointerDown(`trust-${title}`, e)}
                     >
                       <div className="nutrition-flip-card-inner">
                         <div className="nutrition-flip-card-front items-start text-left">
@@ -171,6 +180,7 @@ const About = () => {
               tabIndex={0}
               onMouseEnter={() => setActiveCardId("mission-card")}
               onMouseLeave={() => setActiveCardId((prev) => (prev === "mission-card" ? null : prev))}
+              onPointerDown={(e) => handleCardPointerDown("mission-card", e)}
             >
               <div className="nutrition-flip-card-inner">
                 <div className="nutrition-flip-card-front items-start text-left">
@@ -196,6 +206,7 @@ const About = () => {
               tabIndex={0}
               onMouseEnter={() => setActiveCardId("if-you-card")}
               onMouseLeave={() => setActiveCardId((prev) => (prev === "if-you-card" ? null : prev))}
+              onPointerDown={(e) => handleCardPointerDown("if-you-card", e)}
             >
               <div className="nutrition-flip-card-inner">
                 <div className="nutrition-flip-card-front items-start text-left">
